@@ -60,6 +60,14 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+# Ignore Django collected static files
+staticfiles/
+# Ignore user-uploaded media files
+media/
+# Ignore compiled assets and caches
+assets/
+# Don't ignore migrations directories (they should be tracked). If you have
+# app-level migrations that should be ignored, add them explicitly.
 
 # Flask stuff:
 instance/
@@ -187,6 +195,14 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file. However, if you prefer, 
 #  you could uncomment the following to ignore the entire vscode folder
 # .vscode/
+
+# macOS/Windows filesystem files
+.DS_Store
+Thumbs.db
+
+# Editor directories (optional)
+.idea/
+.vscode/
 
 # Ruff stuff:
 .ruff_cache/
