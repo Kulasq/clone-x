@@ -16,3 +16,17 @@ def register_view(request):
     else:
         form = RegisterForm()
     return render(request, 'users/register.html', {'form': form})
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Usuário ou senha inválidos.')
+    
+    return render(request, 'users/login.html')
