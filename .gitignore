@@ -64,6 +64,7 @@ db.sqlite3-journal
 staticfiles/
 # Ignore user-uploaded media files
 media/
+/profile_pics/
 # Ignore compiled assets and caches
 assets/
 # Don't ignore migrations directories (they should be tracked). If you have
