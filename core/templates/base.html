@@ -16,6 +16,7 @@
             <div>
                 {% if user.is_authenticated %}
                     <span class="text-white me-3">Olá, {{ user.username }}!</span>
+                    <a href="{% url 'profile' %}" class="btn btn-outline-light btn-sm me-2">Meu Perfil</a>
                     <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Sair</a>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm me-2">Entrar</a>

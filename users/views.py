@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -60,3 +60,34 @@ def register_view(request):
             messages.error(request, 'Erro ao criar conta. Tente novamente.')
     
     return render(request, 'users/register.html')
+
+@login_required
+def profile_view(request):
+    """Página de perfil do usuário logado"""
+    return render(request, 'users/profile.html', {'user': request.user})
+
+@login_required
+def profile_edit_view(request):
+    """Edição do perfil do usuário"""
+    if request.method == 'POST':
+        user = request.user
+        
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.bio = request.POST.get('bio', user.bio)
+        user.location = request.POST.get('location', user.location)
+        user.website = request.POST.get('website', user.website)
+
+        if 'profile_picture' in request.FILES:
+            user.profile_picture = request.FILES['profile_picture']
+        
+        user.save()
+        messages.success(request, 'Perfil atualizado com sucesso!')
+        return redirect('profile')
+    
+    return render(request, 'users/profile_edit.html')
+
+def public_profile_view(request, username):
+    """Perfil público de qualquer usuário"""
+    user = get_object_or_404(User, username=username)
+    return render(request, 'users/public_profile.html', {'profile_user': user})
