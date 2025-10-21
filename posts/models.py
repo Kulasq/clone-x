@@ -15,6 +15,12 @@ class Post(models.Model):
         ordering = ['-created_at']
         verbose_name = 'Post'
         verbose_name_plural = 'Posts'
+
+    def user_has_liked(self, user):
+        """Verifica se um usuário curtiu este post"""
+        if user.is_authenticated:
+            return self.likes.filter(user=user).exists()
+        return False
     
     def __str__(self):
         return f"{self.user.username}: {self.content[:50]}"
