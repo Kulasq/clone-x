@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Post
+from .models import Post, Like
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -52,3 +52,22 @@ def post_delete_view(request, pk):
         return redirect('home')
     
     return render(request, 'posts/confirm_delete.html', {'post': post})
+
+@login_required
+def like_post_view(request, pk):
+    """Curte ou descurte um post"""
+    post = get_object_or_404(Post, pk=pk)
+    
+    # Verifica se o usuário já curtiu o post
+    like_exists = Like.objects.filter(user=request.user, post=post).exists()
+    
+    if like_exists:
+        # Descurtir
+        Like.objects.filter(user=request.user, post=post).delete()
+        messages.info(request, 'Post descurtido.')
+    else:
+        # Curtir
+        Like.objects.create(user=request.user, post=post)
+        messages.success(request, 'Post curtido!')
+    
+    return redirect('home')
