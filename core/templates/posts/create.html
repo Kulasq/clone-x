@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Criar Post | Clone X{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="mb-4 text-center fw-bold">Criar Novo Post</h4>
+                
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">O que está acontecendo?</label>
+                        <textarea class="form-control" id="content" name="content" rows="4" 
+                                placeholder="Compartilhe seus pensamentos..." maxlength="280" required></textarea>
+                        <div class="form-text">
+                            <span id="charCount">0</span>/280 caracteres
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Imagem (opcional)</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary me-md-2">Cancelar</a>
+                        <button type="submit" class="btn btn-dark">Postar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Contador de caracteres
+    document.getElementById('content').addEventListener('input', function() {
+        const charCount = this.value.length;
+        document.getElementById('charCount').textContent = charCount;
+        
+        if (charCount > 280) {
+            document.getElementById('charCount').classList.add('text-danger');
+        } else {
+            document.getElementById('charCount').classList.remove('text-danger');
+        }
+    });
+</script>
+{% endblock %}
