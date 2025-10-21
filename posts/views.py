@@ -41,10 +41,9 @@ def post_delete_view(request, pk):
     """Exclui um post"""
     post = get_object_or_404(Post, pk=pk)
     
-    # Verifica se o usuário é o dono do post
     if post.user != request.user:
         messages.error(request, 'Você não tem permissão para excluir este post.')
-        return redirect('post_detail', pk=post.pk)
+        return redirect('home')
     
     if request.method == 'POST':
         post.delete()
