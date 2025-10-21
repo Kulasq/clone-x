@@ -66,16 +66,13 @@
 
                 <!-- Interações -->
                 <div class="d-flex justify-content-between text-muted">
-                    <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %}">
-                            ❤️ {{ post.likes_count }}
-                        </button>
-                    </form>
-                    <button class="btn btn-sm btn-outline-secondary">
-                        💬 {{ post.comments_count }}
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                        ❤️ 0
                     </button>
-                    <button class="btn btn-sm btn-outline-secondary">
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                        💬 0
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
                         🔄
                     </button>
                     {% if user == post.user %}
