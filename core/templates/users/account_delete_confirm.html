@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Excluir Conta | Clone X{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h4 class="mb-4 text-danger fw-bold">Excluir Conta Permanentemente</h4>
+                
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+                </div>
+                
+                <p class="mb-4">
+                    Todos os seus dados, posts, likes e informações serão permanentemente excluídos. 
+                    Esta ação é irreversível.
+                </p>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="confirm_username" class="form-label">
+                            Digite seu nome de usuário para confirmar: <strong>{{ user.username }}</strong>
+                        </label>
+                        <input type="text" class="form-control" id="confirm_username" name="confirm_username" 
+                            placeholder="Digite seu nome de usuário" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'profile' %}" class="btn btn-outline-secondary me-md-2">Cancelar</a>
+                        <button type="submit" class="btn btn-danger" id="deleteButton" disabled>
+                            Sim, Excluir Minha Conta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Habilita o botão apenas quando o username estiver correto
+    document.getElementById('confirm_username').addEventListener('input', function() {
+        const deleteButton = document.getElementById('deleteButton');
+        deleteButton.disabled = this.value !== '{{ user.username }}';
+    });
+</script>
+{% endblock %}
