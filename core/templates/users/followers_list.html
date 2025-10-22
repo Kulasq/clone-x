@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Seguidores | {{ profile_user.username }} | Clone X{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <a href="{% url 'public_profile' profile_user.username %}" class="text-decoration-none">
+                            @{{ profile_user.username }}
+                        </a>
+                    </h5>
+                    <span class="text-muted">Seguidores: {{ users_list|length }}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                {% for user in users_list %}
+                <div class="d-flex align-items-center mb-3 {% if not forloop.last %}pb-3 border-bottom{% endif %}">
+                    <div class="flex-shrink-0">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Foto de perfil" 
+                                class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                style="width: 50px; height: 50px;">
+                                <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="mb-0 fw-bold">{{ user.get_full_name|default:user.username }}</h6>
+                        <p class="text-muted mb-0">@{{ user.username }}</p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="{% url 'public_profile' user.username %}" class="btn btn-outline-dark btn-sm">
+                            Ver Perfil
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-3 mb-0">
+                    {% if user == profile_user %}
+                        Você ainda não tem seguidores.
+                    {% else %}
+                        {{ profile_user.username }} ainda não tem seguidores.
+                    {% endif %}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
