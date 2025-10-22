@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Buscar Usuários | Clone X{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <!-- Campo de Busca -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="mb-4 text-center fw-bold">Buscar Usuários</h4>
+                
+                <form method="GET" action="{% url 'user_search' %}">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control form-control-lg" 
+                            placeholder="Digite o nome de usuário, primeiro nome ou último nome..."
+                            value="{{ query }}" autocomplete="off">
+                        <button type="submit" class="btn btn-dark btn-lg">
+                            🔍 Buscar
+                        </button>
+                    </div>
+                </form>
+                
+                {% if query %}
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            {% if results_count > 0 %}
+                                Encontrado{{ results_count|pluralize }} {{ results_count }} usuário{{ results_count|pluralize }}
+                            {% else %}
+                                Nenhum usuário encontrado para "{{ query }}"
+                            {% endif %}
+                        </small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Resultados da Busca -->
+        {% if query %}
+            {% if users %}
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-3">Resultados da Busca</h5>
+                    
+                    {% for user_result in users %}
+                    <div class="d-flex align-items-center mb-3 {% if not forloop.last %}pb-3 border-bottom{% endif %}">
+                        <div class="flex-shrink-0">
+                            {% if user_result.profile_picture %}
+                                <img src="{{ user_result.profile_picture.url }}" alt="Foto de perfil" 
+                                    class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                    style="width: 60px; height: 60px;">
+                                    <span class="text-white fw-bold">{{ user_result.username|first|upper }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0 fw-bold">{{ user_result.get_full_name|default:user_result.username }}</h6>
+                            <p class="text-muted mb-1">@{{ user_result.username }}</p>
+                            
+                            {% if user_result.bio %}
+                                <p class="small text-muted mb-0">{{ user_result.bio|truncatewords:10 }}</p>
+                            {% endif %}
+                            
+                            <div class="d-flex mt-1">
+                                <small class="text-muted me-3">
+                                    <strong>{{ user_result.posts.count }}</strong> posts
+                                </small>
+                                <small class="text-muted me-3">
+                                    <strong>{{ user_result.followers_count }}</strong> seguidores
+                                </small>
+                                <small class="text-muted">
+                                    <strong>{{ user_result.following_count }}</strong> seguindo
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-shrink-0">
+                            <a href="{% url 'public_profile' user_result.username %}" class="btn btn-outline-dark btn-sm me-2">
+                                Ver Perfil
+                            </a>
+                            
+                            {% if request.user.is_authenticated and request.user != user_result %}
+                                <form action="{% url 'follow_user' user_result.username %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    {% if request.user in user_result.followers.all %}
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            Deixar de Seguir
+                                        </button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-dark btn-sm">
+                                            Seguir
+                                        </button>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="card shadow-sm">
+                <div class="card-body text-center py-5">
+                    <h5 class="text-muted">Nenhum usuário encontrado</h5>
+                    <p class="text-muted">Tente buscar por nome de usuário, primeiro nome ou último nome.</p>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

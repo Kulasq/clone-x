@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model  
+from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -162,4 +163,23 @@ def followers_list_view(request, username):
         'profile_user': user,
         'users_list': followers,
         'list_type': 'followers'
+    })
+
+def user_search_view(request):
+    """Busca simples de usuários"""
+    query = request.GET.get('q', '').strip()
+    users = []
+    
+    if query:
+        # Busca por username, primeiro nome ou último nome
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        ).exclude(id=request.user.id if request.user.is_authenticated else None)
+    
+    return render(request, 'users/search.html', {
+        'query': query,
+        'users': users,
+        'results_count': users.count()
     })
