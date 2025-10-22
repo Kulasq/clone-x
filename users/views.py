@@ -120,3 +120,46 @@ def account_delete_view(request):
         return redirect('home')
     
     return render(request, 'users/account_delete_confirm.html')
+
+# Sistema de seguir
+@login_required
+def follow_user_view(request, username):
+    """Segue ou deixa de seguir um usuário"""
+    user_to_follow = get_object_or_404(User, username=username)
+    
+    if request.user == user_to_follow:
+        messages.error(request, 'Você não pode seguir a si mesmo.')
+        return redirect('public_profile', username=username)
+    
+    if request.user.is_following(user_to_follow):
+        # Deixa de seguir
+        request.user.unfollow(user_to_follow)
+        messages.info(request, f'Você deixou de seguir {user_to_follow.username}.')
+    else:
+        # Segue
+        request.user.follow(user_to_follow)
+        messages.success(request, f'Você está seguindo {user_to_follow.username}!')
+    
+    return redirect('public_profile', username=username)
+
+@login_required
+def following_list_view(request, username):
+    """Lista de usuários que um usuário segue"""
+    user = get_object_or_404(User, username=username)
+    following = user.following.all()
+    return render(request, 'users/following_list.html', {
+        'profile_user': user,
+        'users_list': following,
+        'list_type': 'following'
+    })
+
+@login_required
+def followers_list_view(request, username):
+    """Lista de seguidores de um usuário"""
+    user = get_object_or_404(User, username=username)
+    followers = user.followers.all()
+    return render(request, 'users/followers_list.html', {
+        'profile_user': user,
+        'users_list': followers,
+        'list_type': 'followers'
+    })

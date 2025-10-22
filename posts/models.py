@@ -55,7 +55,7 @@ class Post(models.Model):
     
     @property
     def comments_count(self):
-        return 0
+        return self.comments.count()
     
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
@@ -67,3 +67,21 @@ class Like(models.Model):
     
     def __str__(self):
         return f"{self.user.username} curtiu {self.post.id}"
+    
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField(max_length=280, verbose_name='Comentário')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
+    
+    class Meta:
+        ordering = ['created_at']  
+        verbose_name = 'Comentário'
+        verbose_name_plural = 'Comentários'
+    
+    def __str__(self):
+        return f"{self.user.username}: {self.content[:30]}"
+    
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'pk': self.post.pk})

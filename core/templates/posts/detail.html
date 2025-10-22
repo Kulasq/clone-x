@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block title %}Post de {{ post.user.username }} | Clone X{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <!-- Post Principal -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <!-- Cabeçalho do post -->
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="d-flex align-items-center">
+                        {% if post.user.profile_picture %}
+                            <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil" 
+                                class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 
+                                style="width: 40px; height: 40px;">
+                                <span class="text-white fw-bold small">{{ post.user.username|first|upper }}</span>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h6 class="mb-0 fw-bold">{{ post.user.get_full_name|default:post.user.username }}</h6>
+                            <small class="text-muted">@{{ post.user.username }}</small>
+                        </div>
+                    </div>
+                    <small class="text-muted">{{ post.created_at|timesince }} atrás</small>
+                </div>
+
+                <!-- Conteúdo do post -->
+                <p class="card-text mb-3">{{ post.content }}</p>
+
+                <!-- Imagem do post -->
+                {% if post.image %}
+                <div class="mb-3">
+                    <img src="{{ post.image.url }}" alt="Imagem do post" class="img-fluid rounded">
+                </div>
+                {% endif %}
+
+                <!-- Interações -->
+                <div class="d-flex justify-content-between text-muted">
+                    <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %}">
+                            ❤️ {{ post.likes_count }}
+                        </button>
+                    </form>
+                    
+                    <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
+                        💬 {{ post.comments_count }}
+                    </a>
+                    
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                        🔄
+                    </button>
+                    
+                    {% if user == post.user %}
+                    <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
+                        🗑️
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário de Comentário -->
+        {% if user.is_authenticated %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form method="POST" action="{% url 'add_comment' post.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="commentContent" class="form-label">Adicionar comentário</label>
+                        <textarea class="form-control" id="commentContent" name="content" 
+                                rows="3" placeholder="Escreva seu comentário..." maxlength="280" required></textarea>
+                        <div class="form-text">
+                            <span id="commentCharCount">0</span>/280 caracteres
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-dark btn-sm">Comentar</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Lista de Comentários -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h6 class="mb-0">Comentários ({{ post.comments_count }})</h6>
+            </div>
+            <div class="card-body">
+                {% for comment in post.comments.all %}
+                <div class="d-flex mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                    <div class="flex-shrink-0">
+                        {% if comment.user.profile_picture %}
+                            <img src="{{ comment.user.profile_picture.url }}" alt="Foto de perfil" 
+                                class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                style="width: 35px; height: 35px;">
+                                <span class="text-white fw-bold small">{{ comment.user.username|first|upper }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong class="small">{{ comment.user.get_full_name|default:comment.user.username }}</strong>
+                                <small class="text-muted">@{{ comment.user.username }}</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <small class="text-muted me-2">{{ comment.created_at|timesince }} atrás</small>
+                                {% if user == comment.user or user == post.user %}
+                                <form action="{% url 'delete_comment' comment.pk %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger p-1" 
+                                            onclick="return confirm('Tem certeza que deseja excluir este comentário?')">
+                                        🗑️
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="mb-0 small">{{ comment.content }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-3 mb-0">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Contador de caracteres para comentários
+    document.getElementById('commentContent').addEventListener('input', function() {
+        const charCount = this.value.length;
+        document.getElementById('commentCharCount').textContent = charCount;
+        
+        if (charCount > 280) {
+            document.getElementById('commentCharCount').classList.add('text-danger');
+        } else {
+            document.getElementById('commentCharCount').classList.remove('text-danger');
+        }
+    });
+</script>
+{% endblock %}

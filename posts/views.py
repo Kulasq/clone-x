@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Post, Like
+from .models import Post, Like, Comment
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -70,3 +70,43 @@ def like_post_view(request, pk):
         messages.success(request, 'Post curtido!')
     
     return redirect('home')
+
+#Sistema de comentários
+
+@login_required
+def add_comment_view(request, pk):
+    """Adiciona um comentário a um post"""
+    post = get_object_or_404(Post, pk=pk)
+    
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        
+        if content and content.strip():
+            Comment.objects.create(
+                user=request.user,
+                post=post,
+                content=content.strip()
+            )
+            messages.success(request, 'Comentário adicionado!')
+        else:
+            messages.error(request, 'O comentário não pode estar vazio.')
+    
+    return redirect('post_detail', pk=post.pk)
+
+@login_required
+def delete_comment_view(request, pk):
+    """Exclui um comentário"""
+    comment = get_object_or_404(Comment, pk=pk)
+    
+    # Verifica se o usuário é o dono do comentário
+    if comment.user != request.user:
+        messages.error(request, 'Você não tem permissão para excluir este comentário.')
+        return redirect('post_detail', pk=comment.post.pk)
+    
+    if request.method == 'POST':
+        post_pk = comment.post.pk
+        comment.delete()
+        messages.success(request, 'Comentário excluído com sucesso!')
+        return redirect('post_detail', pk=post_pk)
+    
+    return render(request, 'posts/comment_confirm_delete.html', {'comment': comment})
