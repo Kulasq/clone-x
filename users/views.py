@@ -91,3 +91,32 @@ def public_profile_view(request, username):
     """Perfil público de qualquer usuário"""
     user = get_object_or_404(User, username=username)
     return render(request, 'users/public_profile.html', {'profile_user': user})
+
+#Para deletar o perfil do usuário
+@login_required
+def delete_profile_picture_view(request):
+    """Remove a foto de perfil do usuário"""
+    if request.method == 'POST':
+        request.user.delete_profile_picture()
+        messages.success(request, 'Foto de perfil removida com sucesso!')
+        return redirect('profile')
+    
+    return redirect('profile_edit')
+
+@login_required
+def account_delete_view(request):
+    """Exclui permanentemente a conta do usuário"""
+    if request.method == 'POST':
+        user = request.user
+        
+        # Logout antes de deletar
+        from django.contrib.auth import logout
+        logout(request)
+        
+        # Deleta o usuário
+        user.delete()
+        
+        messages.success(request, 'Sua conta foi excluída permanentemente.')
+        return redirect('home')
+    
+    return render(request, 'users/account_delete_confirm.html')

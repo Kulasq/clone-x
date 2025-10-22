@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Excluir Post | Clone X{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h4 class="mb-4 text-danger fw-bold">Excluir Post</h4>
+                
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Atenção!</strong> Esta ação não pode ser desfeita.
+                </div>
+                
+                <!-- Preview do post que será excluído -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            {% if post.user.profile_picture %}
+                                <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil" 
+                                    class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 
+                                    style="width: 40px; height: 40px;">
+                                    <span class="text-white fw-bold small">{{ post.user.username|first|upper }}</span>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ post.user.get_full_name|default:post.user.username }}</h6>
+                                <small class="text-muted">@{{ post.user.username }}</small>
+                            </div>
+                        </div>
+                        <p class="card-text">{{ post.content }}</p>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="Imagem do post" class="img-fluid rounded mb-2">
+                        {% endif %}
+                        <small class="text-muted">{{ post.created_at|timesince }} atrás</small>
+                    </div>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary me-md-2">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Sim, Excluir Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

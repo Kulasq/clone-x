@@ -12,7 +12,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Clone X</a>
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">Clone X</a>
             <div>
                 {% if user.is_authenticated %}
                     <span class="text-white me-3">Olá, {{ user.username }}!</span>
