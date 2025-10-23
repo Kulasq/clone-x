@@ -28,14 +28,10 @@
                         <!-- 1. Saudação -->
                         <span class="text-white mb-3">Olá, {{ user.username }}!</span>
                         
-                        <!-- 2. Campo de busca -->
-                        <form class="mb-3 w-100" method="GET" action="{% url 'user_search' %}">
-                            <div class="input-group">
-                                <input type="text" name="q" class="form-control" placeholder="Buscar usuários..." 
-                                    aria-label="Buscar usuários" autocomplete="off">
-                                <button type="submit" class="btn btn-outline-light">🔍</button>
-                            </div>
-                        </form>
+                        <!-- 2. Botão de Busca (mobile) -->
+                        <a href="{% url 'user_search' %}" class="btn btn-outline-light btn-sm w-100 mb-2">
+                            🔍 Buscar Usuários
+                        </a>
                         
                         <!-- 3. Meu Perfil -->
                         <a href="{% url 'profile' %}" class="btn btn-outline-light btn-sm w-100 mb-2">Meu Perfil</a>
@@ -44,19 +40,19 @@
                         <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm w-100">Sair</a>
                     </div>
 
-                    <!-- DESKTOP: Busca no meio -->
-                    <div class="d-none d-lg-flex mx-auto" style="max-width: 400px; width: 100%;">
-                        <form class="d-flex w-100" method="GET" action="{% url 'user_search' %}">
-                            <input type="text" name="q" class="form-control me-2" placeholder="Buscar usuários..." 
-                                aria-label="Buscar usuários" autocomplete="off">
-                            <button type="submit" class="btn btn-outline-light">🔍</button>
-                        </form>
-                    </div>
-
-                    <!-- DESKTOP: Menu direito -->
+                    <!-- DESKTOP: Menu direito com busca integrada -->
                     <div class="d-none d-lg-flex align-items-center ms-auto">
                         <span class="text-white me-3">Olá, {{ user.username }}!</span>
+                        
+                        <!-- Botão de Busca -->
+                        <a href="{% url 'user_search' %}" class="btn btn-outline-light btn-sm me-2">
+                            🔍 Buscar
+                        </a>
+                        
+                        <!-- Meu Perfil -->
                         <a href="{% url 'profile' %}" class="btn btn-outline-light btn-sm me-2">Meu Perfil</a>
+                        
+                        <!-- Sair -->
                         <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Sair</a>
                     </div>
 

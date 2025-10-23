@@ -166,9 +166,10 @@ def followers_list_view(request, username):
     })
 
 def user_search_view(request):
-    """Busca simples de usuários"""
+    """Busca simples de usuários com sugestões"""
     query = request.GET.get('q', '').strip()
     users = []
+    suggested_users = []
     
     if query:
         # Busca por username, primeiro nome ou último nome
@@ -177,9 +178,20 @@ def user_search_view(request):
             Q(first_name__icontains=query) |
             Q(last_name__icontains=query)
         ).exclude(id=request.user.id if request.user.is_authenticated else None)
+        results_count = users.count()  
+    else:
+        # Sugere usuários quando não há busca
+        if request.user.is_authenticated:
+            suggested_users = User.objects.exclude(
+                Q(id=request.user.id) | Q(followers=request.user)
+            )[:6]
+        else:
+            suggested_users = User.objects.all()[:6]
+        results_count = 0
     
     return render(request, 'users/search.html', {
         'query': query,
         'users': users,
-        'results_count': users.count()
+        'suggested_users': suggested_users,
+        'results_count': results_count 
     })
