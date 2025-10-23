@@ -64,8 +64,12 @@ def register_view(request):
 
 @login_required
 def profile_view(request):
-    """Página de perfil do usuário logado"""
-    return render(request, 'users/profile.html', {'user': request.user})
+    """Página de perfil do usuário logado com seus posts"""
+    user_posts = request.user.posts.all().order_by('-created_at')
+    return render(request, 'users/profile.html', {
+        'user': request.user,
+        'user_posts': user_posts
+    })
 
 @login_required
 def profile_edit_view(request):
