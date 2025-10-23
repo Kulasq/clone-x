@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model  
+from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -14,16 +15,16 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-            messages.success(request, f'Welcome back, {user.username}!')
+            # messages.success(request, f'Welcome back, {user.username}!')
             return redirect('home')
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.error(request, 'Usuario ou senha inválidos.')
     
     return render(request, 'users/login.html')
 
 def logout_view(request):
     logout(request)
-    messages.info(request, 'You have been logged out.')
+    messages.info(request, 'Você saiu da sua conta.')
     return redirect('login')
 
 def register_view(request):
@@ -82,7 +83,6 @@ def profile_edit_view(request):
             user.profile_picture = request.FILES['profile_picture']
         
         user.save()
-        messages.success(request, 'Perfil atualizado com sucesso!')
         return redirect('profile')
     
     return render(request, 'users/profile_edit.html')
@@ -98,7 +98,6 @@ def delete_profile_picture_view(request):
     """Remove a foto de perfil do usuário"""
     if request.method == 'POST':
         request.user.delete_profile_picture()
-        messages.success(request, 'Foto de perfil removida com sucesso!')
         return redirect('profile')
     
     return redirect('profile_edit')
@@ -128,19 +127,16 @@ def follow_user_view(request, username):
     user_to_follow = get_object_or_404(User, username=username)
     
     if request.user == user_to_follow:
-        messages.error(request, 'Você não pode seguir a si mesmo.')
         return redirect('public_profile', username=username)
     
     if request.user.is_following(user_to_follow):
         # Deixa de seguir
         request.user.unfollow(user_to_follow)
-        messages.info(request, f'Você deixou de seguir {user_to_follow.username}.')
     else:
         # Segue
         request.user.follow(user_to_follow)
-        messages.success(request, f'Você está seguindo {user_to_follow.username}!')
     
-    return redirect('public_profile', username=username)
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required
 def following_list_view(request, username):
@@ -162,4 +158,33 @@ def followers_list_view(request, username):
         'profile_user': user,
         'users_list': followers,
         'list_type': 'followers'
+    })
+
+def user_search_view(request):
+    """Busca simples de usuários com sugestões"""
+    query = request.GET.get('q', '').strip()
+    users = []
+    suggested_users = []
+    
+    if query:
+        # Busca por username, primeiro nome ou último nome
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query)
+        ).exclude(id=request.user.id if request.user.is_authenticated else None)
+        results_count = users.count()  
+    else:
+        # Sugere usuários quando não há busca
+        if request.user.is_authenticated:
+            suggested_users = User.objects.exclude(id=request.user.id)[:8]
+        else:
+            suggested_users = User.objects.all()[:6]
+        results_count = 0
+    
+    return render(request, 'users/search.html', {
+        'query': query,
+        'users': users,
+        'suggested_users': suggested_users,
+        'results_count': results_count 
     })
