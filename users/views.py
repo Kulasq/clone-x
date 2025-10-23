@@ -141,7 +141,8 @@ def follow_user_view(request, username):
         request.user.follow(user_to_follow)
         messages.success(request, f'Você está seguindo {user_to_follow.username}!')
     
-    return redirect('public_profile', username=username)
+    # Redireciona de volta para a página anterior (search ou onde estava)
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required
 def following_list_view(request, username):
@@ -182,9 +183,7 @@ def user_search_view(request):
     else:
         # Sugere usuários quando não há busca
         if request.user.is_authenticated:
-            suggested_users = User.objects.exclude(
-                Q(id=request.user.id) | Q(followers=request.user)
-            )[:6]
+            suggested_users = User.objects.exclude(id=request.user.id)[:8]
         else:
             suggested_users = User.objects.all()[:6]
         results_count = 0
