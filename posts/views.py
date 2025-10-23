@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from .models import Post, Like, Comment
 from django.contrib.auth import get_user_model
 
@@ -19,10 +18,10 @@ def post_create_view(request):
                 content=content,
                 image=image
             )
-            messages.success(request, 'Post criado com sucesso!')
+            # messages.success(request, 'Post criado com sucesso!')
             return redirect('home')
-        else:
-            messages.error(request, 'O conteúdo do post não pode estar vazio.')
+        # else:
+        #     # messages.error(request, 'O conteúdo do post não pode estar vazio.')
     
     return render(request, 'posts/create.html')
 
@@ -42,12 +41,12 @@ def post_delete_view(request, pk):
     post = get_object_or_404(Post, pk=pk)
     
     if post.user != request.user:
-        messages.error(request, 'Você não tem permissão para excluir este post.')
+        # messages.error(request, 'Você não tem permissão para excluir este post.')
         return redirect('home')
     
     if request.method == 'POST':
         post.delete()
-        messages.success(request, 'Post excluído com sucesso!')
+        # messages.success(request, 'Post excluído com sucesso!')
         return redirect('home')
     
     return render(request, 'posts/confirm_delete.html', {'post': post})
@@ -63,11 +62,11 @@ def like_post_view(request, pk):
     if like_exists:
         # Descurtir
         Like.objects.filter(user=request.user, post=post).delete()
-        messages.info(request, 'Post descurtido.')
+        # messages.info(request, 'Post descurtido.')
     else:
         # Curtir
         Like.objects.create(user=request.user, post=post)
-        messages.success(request, 'Post curtido!')
+        # messages.success(request, 'Post curtido!')
     
     return redirect('home')
 
@@ -87,9 +86,9 @@ def add_comment_view(request, pk):
                 post=post,
                 content=content.strip()
             )
-            messages.success(request, 'Comentário adicionado!')
-        else:
-            messages.error(request, 'O comentário não pode estar vazio.')
+        #     messages.success(request, 'Comentário adicionado!')
+        # else:
+        #     messages.error(request, 'O comentário não pode estar vazio.')
     
     return redirect('post_detail', pk=post.pk)
 
@@ -100,13 +99,13 @@ def delete_comment_view(request, pk):
     
     # Verifica se o usuário é o dono do comentário
     if comment.user != request.user:
-        messages.error(request, 'Você não tem permissão para excluir este comentário.')
+        # messages.error(request, 'Você não tem permissão para excluir este comentário.')
         return redirect('post_detail', pk=comment.post.pk)
     
     if request.method == 'POST':
         post_pk = comment.post.pk
         comment.delete()
-        messages.success(request, 'Comentário excluído com sucesso!')
+        # messages.success(request, 'Comentário excluído com sucesso!')
         return redirect('post_detail', pk=post_pk)
     
     return render(request, 'posts/comment_confirm_delete.html', {'comment': comment})

@@ -15,16 +15,16 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-            messages.success(request, f'Welcome back, {user.username}!')
+            # messages.success(request, f'Welcome back, {user.username}!')
             return redirect('home')
         else:
-            messages.error(request, 'Invalid username or password.')
+            messages.error(request, 'Usuario ou senha inválidos.')
     
     return render(request, 'users/login.html')
 
 def logout_view(request):
     logout(request)
-    messages.info(request, 'You have been logged out.')
+    messages.info(request, 'Você saiu da sua conta.')
     return redirect('login')
 
 def register_view(request):
@@ -83,7 +83,6 @@ def profile_edit_view(request):
             user.profile_picture = request.FILES['profile_picture']
         
         user.save()
-        messages.success(request, 'Perfil atualizado com sucesso!')
         return redirect('profile')
     
     return render(request, 'users/profile_edit.html')
@@ -99,7 +98,6 @@ def delete_profile_picture_view(request):
     """Remove a foto de perfil do usuário"""
     if request.method == 'POST':
         request.user.delete_profile_picture()
-        messages.success(request, 'Foto de perfil removida com sucesso!')
         return redirect('profile')
     
     return redirect('profile_edit')
@@ -129,19 +127,15 @@ def follow_user_view(request, username):
     user_to_follow = get_object_or_404(User, username=username)
     
     if request.user == user_to_follow:
-        messages.error(request, 'Você não pode seguir a si mesmo.')
         return redirect('public_profile', username=username)
     
     if request.user.is_following(user_to_follow):
         # Deixa de seguir
         request.user.unfollow(user_to_follow)
-        messages.info(request, f'Você deixou de seguir {user_to_follow.username}.')
     else:
         # Segue
         request.user.follow(user_to_follow)
-        messages.success(request, f'Você está seguindo {user_to_follow.username}!')
     
-    # Redireciona de volta para a página anterior (search ou onde estava)
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 @login_required
