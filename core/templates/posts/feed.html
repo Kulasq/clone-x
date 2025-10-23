@@ -22,7 +22,7 @@
                     </div>
                     <div class="flex-grow-1 ms-3">
                         <a href="{% url 'post_create' %}" class="btn btn-outline-secondary w-100 text-start">
-                            O que está acontecendo?
+                            Faaala boy!!
                         </a>
                     </div>
                 </div>
@@ -37,23 +37,24 @@
                 <!-- Cabeçalho do post -->
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div class="d-flex align-items-center">
-                        {% if post.user.profile_picture %}
-                            <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil" 
-                                class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                        {% else %}
-                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 
-                                style="width: 40px; height: 40px;">
-                                <span class="text-white fw-bold small">{{ post.user.username|first|upper }}</span>
+                        <a href="{% url 'public_profile' post.user.username %}" class="text-decoration-none d-flex align-items-center">
+                            {% if post.user.profile_picture %}
+                                <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil" 
+                                    class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 
+                                    style="width: 40px; height: 40px;">
+                                    <span class="text-white fw-bold small">{{ post.user.username|first|upper }}</span>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0 fw-bold text-dark">{{ post.user.get_full_name|default:post.user.username }}</h6>
+                                <small class="text-muted">@{{ post.user.username }}</small>
                             </div>
-                        {% endif %}
-                        <div>
-                            <h6 class="mb-0 fw-bold">{{ post.user.get_full_name|default:post.user.username }}</h6>
-                            <small class="text-muted">@{{ post.user.username }}</small>
-                        </div>
+                        </a>
                     </div>
                     <small class="text-muted">{{ post.created_at|timesince }} atrás</small>
                 </div>
-
                 <!-- Conteúdo do post -->
                 <p class="card-text mb-3">{{ post.content }}</p>
 
@@ -76,10 +77,6 @@
                     <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
                         💬 {{ post.comments_count }}
                     </a>
-                    
-                    <button class="btn btn-sm btn-outline-secondary" disabled>
-                        🔄
-                    </button>
                     
                     {% if user == post.user %}
                     <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
