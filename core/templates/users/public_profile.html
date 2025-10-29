@@ -93,12 +93,22 @@
                     {% if post.image %}
                         <img src="{{ post.image.url }}" alt="Imagem do post" class="img-fluid rounded mb-2" style="max-height: 300px;">
                     {% endif %}
-                    <div class="d-flex justify-content-between text-muted">
-                        <span>❤️ {{ post.likes_count }}</span>
-                        <span>💬 {{ post.comments_count }}</span>
+                    <div class="d-flex justify-content-between align-items-center text-muted">
+                        <div class="d-flex gap-2">
+                            <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %}">
+                                    ❤️ {{ post.likes_count }}
+                                </button>
+                            </form>
+                            
+                            <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
+                                💬 {{ post.comments_count }}
+                            </a>
+                        </div>
                         
                         {% if user == post.user %}
-                        <a href="{% url 'post_delete' post.pk %}" class="text-danger text-decoration-none">
+                        <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
                             🗑️
                         </a>
                         {% endif %}

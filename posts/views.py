@@ -86,7 +86,7 @@ def like_post_view(request, pk):
         Like.objects.create(user=request.user, post=post)
         # messages.success(request, 'Post curtido!')
     
-    return redirect('home')
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 #Sistema de comentários
 
