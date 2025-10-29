@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Post, Like, Comment
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -26,9 +28,19 @@ def post_create_view(request):
     return render(request, 'posts/create.html')
 
 def post_list_view(request):
-    """Lista todos os posts (feed)"""
-    posts = Post.objects.all().select_related('user')
-    return render(request, 'posts/feed.html', {'posts': posts})
+    if request.user.is_authenticated:
+        # Posts de quem você segue + seus próprios posts
+        following_ids = request.user.following.values_list('id', flat=True)
+        posts = Post.objects.filter(
+            Q(user_id__in=following_ids) | Q(user=request.user)
+        ).select_related('user').order_by('-created_at')
+    else:
+        posts = Post.objects.all().select_related('user')
+        paginator = Paginator(posts, 10)  # 10 posts por página
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        return render(request, 'posts/feed.html', {'page_obj': page_obj})
 
 def post_detail_view(request, pk):
     """Detalhes de um post específico"""
