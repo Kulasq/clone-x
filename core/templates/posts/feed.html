@@ -79,10 +79,6 @@
                         💬 {{ post.comments_count }}
                     </a>
                     
-                    <button class="btn btn-sm btn-outline-secondary" disabled>
-                        🔄
-                    </button>
-                    
                     {% if user == post.user %}
                     <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
                         🗑️
