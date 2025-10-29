@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from .forms import ProfileEditForm
 
 User = get_user_model()
 
@@ -69,38 +70,31 @@ def profile_view(request):
 
 @login_required
 def profile_edit_view(request):
-    """Edição do perfil do usuário"""
-    if request.method == 'POST':
-        user = request.user
-        
-        user.first_name = request.POST.get('first_name', user.first_name)
-        user.last_name = request.POST.get('last_name', user.last_name)
-        user.bio = request.POST.get('bio', user.bio)
-        user.location = request.POST.get('location', user.location)
-        user.website = request.POST.get('website', user.website)
+    user = request.user
 
-        if 'profile_picture' in request.FILES:
-            user.profile_picture = request.FILES['profile_picture']
-        
-        user.save()
-        return redirect('profile')
-    
-    return render(request, 'users/profile_edit.html')
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            remove_photo = form.cleaned_data.get('remove_profile_picture')
+
+            # Salva alterações de texto
+            form.save()
+
+            # Remove a foto se marcado
+            if remove_photo:
+                user.delete_profile_picture()
+
+            messages.success(request, 'Perfil atualizado com sucesso!')
+            return redirect('profile')
+    else:
+        form = ProfileEditForm(instance=user)
+
+    return render(request, 'users/profile_edit.html', {'form': form})
 
 def public_profile_view(request, username):
     """Perfil público de qualquer usuário"""
     user = get_object_or_404(User, username=username)
     return render(request, 'users/public_profile.html', {'profile_user': user})
-
-#Para deletar o perfil do usuário
-@login_required
-def delete_profile_picture_view(request):
-    """Remove a foto de perfil do usuário"""
-    if request.method == 'POST':
-        request.user.delete_profile_picture()
-        return redirect('profile')
-    
-    return redirect('profile_edit')
 
 @login_required
 def account_delete_view(request):

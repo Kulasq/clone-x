@@ -13,34 +13,29 @@
                     
                     <div class="row">
                         <div class="col-md-4 text-center mb-4">
-                            {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" alt="Foto atual" 
-                                    class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                            {% else %}
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
-                                    style="width: 150px; height: 150px;">
-                                    <span class="text-white fw-bold fs-1">{{ user.username|first|upper }}</span>
-                                </div>
-                            {% endif %}
-                            
-                            <div class="mb-3">
-                                <label for="profile_picture" class="form-label">Alterar foto</label>
-                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
-                            </div>
-                        </div>
                         {% if user.profile_picture %}
-                            <div class="mb-3">
-                                <div>
-                                    <form action="{% url 'delete_profile_picture' %}" method="POST" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                                            🗑️ Remover Foto Atual
-                                        </button>
-                                    </form>
-                                    <small class="text-muted d-block mt-1">Exclui permanentemente sua foto de perfil</small>
-                                </div>
+                            <img src="{{ user.profile_picture.url }}" alt="Foto atual" 
+                                class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
+                                style="width: 150px; height: 150px;">
+                                <span class="text-white fw-bold fs-1">{{ user.username|first|upper }}</span>
                             </div>
                         {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Alterar foto</label>
+                            {{ form.profile_picture }}
+                        </div>
+
+                        {% if user.profile_picture %}
+                            <div class="form-check mb-3">
+                                {{ form.remove_profile_picture }}
+                                <label class="form-check-label" for="id_remove_profile_picture">🗑️ Remover Foto Atual</label>
+                            </div>
+                            <small class="text-muted d-block">Exclui permanentemente sua foto de perfil</small>
+                        {% endif %}
+                    </div>
                         <div class="col-md-8">
                             <div class="row">
                                 <div class="col-md-6 mb-3">

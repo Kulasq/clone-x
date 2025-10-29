@@ -7,7 +7,6 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('profile/', views.profile_view, name='profile'),
     path('profile/edit/', views.profile_edit_view, name='profile_edit'),
-    path('profile/delete-picture/', views.delete_profile_picture_view, name='delete_profile_picture'),
     path('account/delete/', views.account_delete_view, name='account_delete'),
     path('search/', views.user_search_view, name='user_search'),
     path('<str:username>/follow/', views.follow_user_view, name='follow_user'),

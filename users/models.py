@@ -23,31 +23,6 @@ class CustomUser(AbstractUser):
         blank=True
     )
     
-    def save(self, *args, **kwargs):
-        """Sobrescreve save para otimizar imagens"""
-        super().save(*args, **kwargs)
-        
-        if self.profile_picture:
-            self.optimize_profile_picture()
-    
-    def optimize_profile_picture(self):
-        """Otimiza e redimensiona a imagem de perfil"""
-        img_path = self.profile_picture.path
-        img = Image.open(img_path)
-        
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size, Image.Resampling.LANCZOS)
-            img.save(img_path, optimize=True, quality=85)
-    
-    def delete_profile_picture(self):
-        """Remove a foto de perfil"""
-        if self.profile_picture:
-            if os.path.isfile(self.profile_picture.path):
-                os.remove(self.profile_picture.path)
-            self.profile_picture.delete(save=False)
-            self.save()
-    
     # Métodos para o sistema de seguir
     def follow(self, user):
         """Segue um usuário"""
