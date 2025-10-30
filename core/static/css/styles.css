@@ -87,3 +87,47 @@ body {
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+
+.card .card-body .post-create-btn {
+    transition: all 0.2s ease;
+    border: 1px solid #dee2e6 !important;
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+.card .card-body .post-create-btn:hover {
+    background-color: #ffffff !important;
+    border-color: #adb5bd !important;
+    color: #495057 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+/* Profile Image Hover Effect */
+.flex-shrink-0 a {
+    transition: transform 0.2s ease;
+}
+
+.flex-shrink-0 a:hover {
+    transform: scale(1.05);
+}
+
+/* User Card Hover Effects (para search.html) */
+.user-card {
+    transition: background-color 0.2s ease;
+}
+
+.user-card:hover {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+/* Mobile button adjustments */
+@media (max-width: 768px) {
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
