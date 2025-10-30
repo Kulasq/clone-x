@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .forms import ProfileEditForm
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -124,11 +125,18 @@ def follow_user_view(request, username):
         return redirect('public_profile', username=username)
     
     if request.user.is_following(user_to_follow):
-        # Deixa de seguir
         request.user.unfollow(user_to_follow)
+        following = False
     else:
-        # Segue
         request.user.follow(user_to_follow)
+        following = True
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'following': following,
+            'followers_count': user_to_follow.followers_count
+        })
     
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 

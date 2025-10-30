@@ -9,14 +9,14 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="mb-0 fw-bold">Perfil de {{ profile_user.username }}</h4>
                     {% if request.user.is_authenticated and request.user != profile_user %}
-                        <form action="{% url 'follow_user' profile_user.username %}" method="POST">
+                        <form action="{% url 'follow_user' profile_user.username %}" method="POST" class="d-inline follow-form">
                             {% csrf_token %}
                             {% if request.user in profile_user.followers.all %}
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <button type="submit" class="btn btn-outline-danger btn-sm follow-btn">
                                     Deixar de Seguir
                                 </button>
                             {% else %}
-                                <button type="submit" class="btn btn-dark btn-sm">
+                                <button type="submit" class="btn btn-dark btn-sm follow-btn">
                                     Seguir
                                 </button>
                             {% endif %}

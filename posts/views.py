@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import Post, Like, Comment
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -74,17 +75,21 @@ def like_post_view(request, pk):
     """Curte ou descurte um post"""
     post = get_object_or_404(Post, pk=pk)
     
-    # Verifica se o usuário já curtiu o post
     like_exists = Like.objects.filter(user=request.user, post=post).exists()
     
     if like_exists:
-        # Descurtir
         Like.objects.filter(user=request.user, post=post).delete()
-        # messages.info(request, 'Post descurtido.')
+        liked = False
     else:
-        # Curtir
         Like.objects.create(user=request.user, post=post)
-        # messages.success(request, 'Post curtido!')
+        liked = True
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'liked': liked,
+            'likes_count': post.likes_count
+        })
     
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 

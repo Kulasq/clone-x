@@ -69,10 +69,10 @@
                 <!-- Interações -->
                 <div class="d-flex justify-content-between align-items-center text-muted">
                     <div class="d-flex gap-2">
-                        <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline">
+                        <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline like-form" data-post-id="{{ post.pk }}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %}">
-                                ❤️ {{ post.likes_count }}
+                            <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %} like-btn">
+                                ❤️ <span class="like-count">{{ post.likes_count }}</span>
                             </button>
                         </form>
                         

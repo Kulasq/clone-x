@@ -88,15 +88,15 @@
                         <!-- Botão de Seguir - ocupa 3 colunas no mobile, 2 no desktop -->
                         <div class="col-3 col-md-2 text-end">
                             {% if request.user.is_authenticated and request.user != user_result %}
-                                <form action="{% url 'follow_user' user_result.username %}" method="POST" class="d-inline">
+                                <form action="{% url 'follow_user' user_result.username %}" method="POST" class="d-inline follow-form">
                                     {% csrf_token %}
                                     {% if request.user in user_result.followers.all %}
-                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100 follow-btn">
                                             <span class="d-none d-md-inline">Deixar</span>
                                             <span class="d-md-none">❌</span>
                                         </button>
                                     {% else %}
-                                        <button type="submit" class="btn btn-dark btn-sm w-100">
+                                        <button type="submit" class="btn btn-dark btn-sm w-100 follow-btn">
                                             <span class="d-none d-md-inline">Seguir</span>
                                             <span class="d-md-none">➕</span>
                                         </button>
