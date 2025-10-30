@@ -11,30 +11,37 @@
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     
-                    <div class="row">
-                        <div class="col-md-4 text-center mb-4">
-                        {% if user.profile_picture %}
-                            <img src="{{ user.profile_picture.url }}" alt="Foto atual" 
-                                class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                        {% else %}
-                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
-                                style="width: 150px; height: 150px;">
-                                <span class="text-white fw-bold fs-1">{{ user.username|first|upper }}</span>
-                            </div>
-                        {% endif %}
-                        
-                        <div class="mb-3">
-                            <label for="profile_picture" class="form-label">Alterar foto</label>
-                            {{ form.profile_picture }}
+                    <div class="col-md-4 text-center mb-4">
+                        <!-- Preview da imagem atual -->
+                        <div class="mb-4">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="Foto atual" 
+                                    class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
+                                    style="width: 150px; height: 150px;">
+                                    <span class="text-white fw-bold fs-1">{{ user.username|first|upper }}</span>
+                                </div>
+                            {% endif %}
                         </div>
-
-                        {% if user.profile_picture %}
-                            <div class="form-check mb-3">
-                                {{ form.remove_profile_picture }}
-                                <label class="form-check-label" for="id_remove_profile_picture">🗑️ Remover Foto Atual</label>
+                        
+                        <!-- Controles de imagem -->
+                        <div class="border-top pt-3">
+                            <div class="mb-3">
+                                <label for="id_profile_picture" class="form-label fw-bold">Alterar foto</label>
+                                {{ form.profile_picture }}
+                                <div class="form-text">Formatos: JPG, PNG, GIF. Máx: 5MB</div>
                             </div>
-                            <small class="text-muted d-block">Exclui permanentemente sua foto de perfil</small>
-                        {% endif %}
+
+                            {% if user.profile_picture %}
+                                <div class="form-check">
+                                    {{ form.remove_profile_picture }}
+                                    <label class="form-check-label text-danger" for="id_remove_profile_picture">
+                                        🗑️ Remover foto atual
+                                    </label>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                         <div class="col-md-8">
                             <div class="row">

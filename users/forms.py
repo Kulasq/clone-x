@@ -23,17 +23,21 @@ class ProfileEditForm(forms.ModelForm):
     """Formulário para edição de perfil, incluindo remoção da foto."""
     remove_profile_picture = forms.BooleanField(
         required=False,
-        label='Remover foto atual'
+        label='🗑️ Remover foto atual'
     )
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'bio', 'location', 'website', 'profile_picture']
         widgets = {
-            'profile_picture': ClearableFileInput(attrs={'class': 'form-control'}),
+            'profile_picture': forms.FileInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'website': forms.URLInput(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['profile_picture'].label = 'Alterar foto'
