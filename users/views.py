@@ -78,12 +78,12 @@ def profile_edit_view(request):
         if form.is_valid():
             remove_photo = form.cleaned_data.get('remove_profile_picture')
 
-            # Salva alterações de texto
-            form.save()
-
             # Remove a foto se marcado
-            if remove_photo:
+            if remove_photo and user.profile_picture:
                 user.delete_profile_picture()
+            
+            # Salva o usuário (isso vai lidar com a substituição de imagem automaticamente)
+            form.save()
 
             messages.success(request, 'Perfil atualizado com sucesso!')
             return redirect('profile')
