@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .forms import ProfileEditForm
 from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 User = get_user_model()
 
@@ -190,3 +192,21 @@ def user_search_view(request):
         'suggested_users': suggested_users,
         'results_count': results_count 
     })
+
+@login_required
+def change_password_view(request):
+    """View para alteração de senha"""
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Atualiza a sessão para não deslogar o usuário
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Sua senha foi alterada com sucesso!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'users/change_password.html', {'form': form})
