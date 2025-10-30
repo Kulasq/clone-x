@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.core.paginator import Paginator
 from .models import Post, Like, Comment
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -26,9 +29,25 @@ def post_create_view(request):
     return render(request, 'posts/create.html')
 
 def post_list_view(request):
-    """Lista todos os posts (feed)"""
-    posts = Post.objects.all().select_related('user')
-    return render(request, 'posts/feed.html', {'posts': posts})
+    """Lista todos os posts (feed) com paginação"""
+    # Query base para posts
+    if request.user.is_authenticated:
+        # Posts de quem você segue + seus próprios posts
+        following_ids = list(request.user.following.values_list('id', flat=True))
+        following_ids.append(request.user.id)  # Inclui o próprio usuário
+        
+        posts = Post.objects.filter(
+            user_id__in=following_ids
+        ).select_related('user').order_by('-created_at')
+    else:
+        posts = Post.objects.all().select_related('user').order_by('-created_at')
+    
+    # Paginação - 10 posts por página
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'posts/feed.html', {'page_obj': page_obj})
 
 def post_detail_view(request, pk):
     """Detalhes de um post específico"""
@@ -56,19 +75,23 @@ def like_post_view(request, pk):
     """Curte ou descurte um post"""
     post = get_object_or_404(Post, pk=pk)
     
-    # Verifica se o usuário já curtiu o post
     like_exists = Like.objects.filter(user=request.user, post=post).exists()
     
     if like_exists:
-        # Descurtir
         Like.objects.filter(user=request.user, post=post).delete()
-        # messages.info(request, 'Post descurtido.')
+        liked = False
     else:
-        # Curtir
         Like.objects.create(user=request.user, post=post)
-        # messages.success(request, 'Post curtido!')
+        liked = True
     
-    return redirect('home')
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'liked': liked,
+            'likes_count': post.likes_count
+        })
+    
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 #Sistema de comentários
 

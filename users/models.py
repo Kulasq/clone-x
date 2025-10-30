@@ -23,31 +23,6 @@ class CustomUser(AbstractUser):
         blank=True
     )
     
-    def save(self, *args, **kwargs):
-        """Sobrescreve save para otimizar imagens"""
-        super().save(*args, **kwargs)
-        
-        if self.profile_picture:
-            self.optimize_profile_picture()
-    
-    def optimize_profile_picture(self):
-        """Otimiza e redimensiona a imagem de perfil"""
-        img_path = self.profile_picture.path
-        img = Image.open(img_path)
-        
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size, Image.Resampling.LANCZOS)
-            img.save(img_path, optimize=True, quality=85)
-    
-    def delete_profile_picture(self):
-        """Remove a foto de perfil"""
-        if self.profile_picture:
-            if os.path.isfile(self.profile_picture.path):
-                os.remove(self.profile_picture.path)
-            self.profile_picture.delete(save=False)
-            self.save()
-    
     # Métodos para o sistema de seguir
     def follow(self, user):
         """Segue um usuário"""
@@ -78,7 +53,17 @@ class CustomUser(AbstractUser):
         return self.following.count()
 
     def save(self, *args, **kwargs):
-        """Sobrescreve save para otimizar imagens"""
+        """Deleta a imagem antiga quando uma nova é uploadada"""
+        # Verifica se é uma atualização e se tem uma imagem antiga
+        if self.pk:
+            try:
+                old_user = CustomUser.objects.get(pk=self.pk)
+                if old_user.profile_picture and old_user.profile_picture != self.profile_picture:
+                    if os.path.isfile(old_user.profile_picture.path):
+                        os.remove(old_user.profile_picture.path)
+            except CustomUser.DoesNotExist:
+                pass
+        
         super().save(*args, **kwargs)
         
         if self.profile_picture:
@@ -95,6 +80,12 @@ class CustomUser(AbstractUser):
             img.thumbnail(output_size, Image.Resampling.LANCZOS)
             img.save(img_path, optimize=True, quality=85)
     
+    def delete(self, *args, **kwargs):
+        """Deleta a foto de perfil do filesystem quando o usuário é excluído"""
+        if self.profile_picture:
+            self.delete_profile_picture()
+        super().delete(*args, **kwargs)
+    
     def delete_profile_picture(self):
         """Remove a foto de perfil"""
         if self.profile_picture:
@@ -103,7 +94,6 @@ class CustomUser(AbstractUser):
                 os.remove(self.profile_picture.path)
             # Limpa o campo
             self.profile_picture.delete(save=False)
-            self.save()
     
     def __str__(self):
         return self.username

@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10 col-lg-8">
         <div class="card shadow-sm">
             <div class="card-body">
                 <h4 class="mb-4 text-center fw-bold">Editar Perfil</h4>
@@ -13,34 +13,38 @@
                     
                     <div class="row">
                         <div class="col-md-4 text-center mb-4">
-                            {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" alt="Foto atual" 
-                                    class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
-                            {% else %}
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
-                                    style="width: 150px; height: 150px;">
-                                    <span class="text-white fw-bold fs-1">{{ user.username|first|upper }}</span>
-                                </div>
-                            {% endif %}
+                            <!-- Preview da imagem atual -->
+                            <div class="mb-4">
+                                {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture.url }}" alt="Foto atual" 
+                                        class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
+                                        style="width: 150px; height: 150px;">
+                                        <span class="text-white fw-bold fs-1">{{ user.username|first|upper }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
                             
-                            <div class="mb-3">
-                                <label for="profile_picture" class="form-label">Alterar foto</label>
-                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
+                            <!-- Controles de imagem -->
+                            <div class="border-top pt-3">
+                                <div class="mb-3">
+                                    <label for="id_profile_picture" class="form-label fw-bold">Alterar foto</label>
+                                    {{ form.profile_picture }}
+                                    <div class="form-text">Formatos: JPG, PNG, GIF. Máx: 5MB</div>
+                                </div>
+
+                                {% if user.profile_picture %}
+                                    <div class="form-check">
+                                        {{ form.remove_profile_picture }}
+                                        <label class="form-check-label text-danger" for="id_remove_profile_picture">
+                                            🗑️ Remover foto atual
+                                        </label>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
-                        {% if user.profile_picture %}
-                            <div class="mb-3">
-                                <div>
-                                    <form action="{% url 'delete_profile_picture' %}" method="POST" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                                            🗑️ Remover Foto Atual
-                                        </button>
-                                    </form>
-                                    <small class="text-muted d-block mt-1">Exclui permanentemente sua foto de perfil</small>
-                                </div>
-                            </div>
-                        {% endif %}
+                        
                         <div class="col-md-8">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -85,18 +89,38 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="mt-4 pt-3 border-top">
-                        <h6 class="text-danger">Zona de Perigo</h6>
-                        <p class="text-muted small mb-2">Exclua permanentemente sua conta e todos os dados</p>
-                        <a href="{% url 'account_delete' %}" class="btn btn-outline-danger btn-sm">
-                            🗑️ Excluir Minha Conta
-                        </a>
-                    </div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                    <!-- Botões de Ação -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                         <a href="{% url 'profile' %}" class="btn btn-outline-secondary me-md-2">Cancelar</a>
                         <button type="submit" class="btn btn-dark">Salvar Alterações</button>
                     </div>
+
+                    <!-- Alteração de Senha -->
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0 fw-bold">Segurança da Conta</h6>
+                            <a href="{% url 'change_password' %}" class="btn btn-outline-dark btn-sm">
+                                🔒 Alterar Senha
+                            </a>
+                        </div>
+                        <p class="text-muted small mb-0">Mantenha sua conta segura com uma senha forte e única.</p>
+                    </div>
+
+                    <!-- Zona de Perigo Melhorada -->
+                    <div class="mt-5 pt-4 border-top">
+                        <div class="alert alert-danger">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fs-5 me-2">⚠️</span>
+                                <h5 class="mb-0 fw-bold">Zona de Perigo</h5>
+                            </div>
+                            <p class="mb-3">Exclua permanentemente sua conta e todos os dados associados. Esta ação não pode ser desfeita.</p>
+                            <a href="{% url 'account_delete' %}" class="btn btn-outline-danger">
+                                🗑️ Excluir Minha Conta Permanentemente
+                            </a>
+                        </div>
+                    </div>
+                    
                 </form>
             </div>
         </div>

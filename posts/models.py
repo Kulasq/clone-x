@@ -13,23 +13,61 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 
+    def delete(self, *args, **kwargs):
+        """Deleta a imagem do filesystem quando o post é excluído"""
+        if self.image:
+            if os.path.isfile(self.image.path):
+                os.remove(self.image.path)
+        super().delete(*args, **kwargs)
+    
     def save(self, *args, **kwargs):
+        """Deleta a imagem antiga quando uma nova é uploadada"""
+        # Verifica se é uma atualização e se tem uma imagem antiga
+        if self.pk:
+            try:
+                old_post = Post.objects.get(pk=self.pk)
+                if old_post.image and old_post.image != self.image:
+                    if os.path.isfile(old_post.image.path):
+                        os.remove(old_post.image.path)
+            except Post.DoesNotExist:
+                pass
+        
         super().save(*args, **kwargs)
         
         if self.image:
             self.optimize_post_image()
     
     def optimize_post_image(self):
-        """Otimiza e redimensiona a imagem do post"""
+        """Otimiza e redimensiona a imagem do post com limites de tamanho"""
         img_path = self.image.path
         img = Image.open(img_path)
         
-        # Redimensiona para tamanho máximo (800px de largura)
-        if img.width > 800:
-            ratio = 800 / img.width
-            new_height = int(img.height * ratio)
-            output_size = (800, new_height)
+        # Define os limites máximos
+        max_width = 800
+        max_height = 400
+        
+        # Verifica se precisa redimensionar
+        needs_resize = img.width > max_width or img.height > max_height
+        
+        if needs_resize:
+            # Calcula as novas dimensões mantendo o aspect ratio
+            if img.width / max_width > img.height / max_height:
+                # Limita pela largura
+                ratio = max_width / img.width
+                new_width = max_width
+                new_height = int(img.height * ratio)
+            else:
+                # Limita pela altura
+                ratio = max_height / img.height
+                new_height = max_height
+                new_width = int(img.width * ratio)
+            
+            # Aplica o redimensionamento
+            output_size = (new_width, new_height)
             img = img.resize(output_size, Image.Resampling.LANCZOS)
+            img.save(img_path, optimize=True, quality=85)
+        
+        elif img.format in ['JPEG', 'JPG']:
             img.save(img_path, optimize=True, quality=85)
     
     class Meta:

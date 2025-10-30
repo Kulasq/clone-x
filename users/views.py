@@ -4,6 +4,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from .forms import ProfileEditForm
+from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 User = get_user_model()
 
@@ -69,38 +73,31 @@ def profile_view(request):
 
 @login_required
 def profile_edit_view(request):
-    """Edição do perfil do usuário"""
-    if request.method == 'POST':
-        user = request.user
-        
-        user.first_name = request.POST.get('first_name', user.first_name)
-        user.last_name = request.POST.get('last_name', user.last_name)
-        user.bio = request.POST.get('bio', user.bio)
-        user.location = request.POST.get('location', user.location)
-        user.website = request.POST.get('website', user.website)
+    user = request.user
 
-        if 'profile_picture' in request.FILES:
-            user.profile_picture = request.FILES['profile_picture']
-        
-        user.save()
-        return redirect('profile')
-    
-    return render(request, 'users/profile_edit.html')
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            remove_photo = form.cleaned_data.get('remove_profile_picture')
+
+            # Remove a foto se marcado
+            if remove_photo and user.profile_picture:
+                user.delete_profile_picture()
+            
+            # Salva o usuário (isso vai lidar com a substituição de imagem automaticamente)
+            form.save()
+
+            messages.success(request, 'Perfil atualizado com sucesso!')
+            return redirect('profile')
+    else:
+        form = ProfileEditForm(instance=user)
+
+    return render(request, 'users/profile_edit.html', {'form': form})
 
 def public_profile_view(request, username):
     """Perfil público de qualquer usuário"""
     user = get_object_or_404(User, username=username)
     return render(request, 'users/public_profile.html', {'profile_user': user})
-
-#Para deletar o perfil do usuário
-@login_required
-def delete_profile_picture_view(request):
-    """Remove a foto de perfil do usuário"""
-    if request.method == 'POST':
-        request.user.delete_profile_picture()
-        return redirect('profile')
-    
-    return redirect('profile_edit')
 
 @login_required
 def account_delete_view(request):
@@ -130,11 +127,18 @@ def follow_user_view(request, username):
         return redirect('public_profile', username=username)
     
     if request.user.is_following(user_to_follow):
-        # Deixa de seguir
         request.user.unfollow(user_to_follow)
+        following = False
     else:
-        # Segue
         request.user.follow(user_to_follow)
+        following = True
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'following': following,
+            'followers_count': user_to_follow.followers_count
+        })
     
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
@@ -188,3 +192,21 @@ def user_search_view(request):
         'suggested_users': suggested_users,
         'results_count': results_count 
     })
+
+@login_required
+def change_password_view(request):
+    """View para alteração de senha"""
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Atualiza a sessão para não deslogar o usuário
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Sua senha foi alterada com sucesso!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'users/change_password.html', {'form': form})
