@@ -36,16 +36,20 @@
                         
                         <div class="row text-center">
                             <div class="col-4">
-                                <strong class="fs-5">0</strong>
+                                <strong class="fs-5">{{ user.posts.count }}</strong>
                                 <p class="text-muted mb-0">Posts</p>
                             </div>
                             <div class="col-4">
-                                <strong class="fs-5">{{ user.followers_count }}</strong>
-                                <p class="text-muted mb-0">Seguidores</p>
+                                <a href="{% url 'followers_list' user.username %}" class="text-decoration-none text-dark">
+                                    <strong class="fs-5 followers-count">{{ user.followers_count }}</strong>
+                                    <p class="text-muted mb-0">Seguidores</p>
+                                </a>
                             </div>
                             <div class="col-4">
-                                <strong class="fs-5">{{ user.following_count }}</strong>
-                                <p class="text-muted mb-0">Seguindo</p>
+                                <a href="{% url 'following_list' user.username %}" class="text-decoration-none text-dark">
+                                    <strong class="fs-5">{{ user.following_count }}</strong>
+                                    <p class="text-muted mb-0">Seguindo</p>
+                                </a>
                             </div>
                         </div>
                         
