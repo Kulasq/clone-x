@@ -65,7 +65,7 @@ clone-x/
 ├── posts/              # App de postagens e interações  
 ├── core/               # Configurações principais do Django  
    ├── static/          # Arquivos estáticos (CSS, JS, imagens)                
-   ├── templates/       # Templates HTML  
+   └── templates/       # Templates HTML  
 ├── manage.py           # Script principal do Django  
 ├── requirements.txt    # Dependências do projeto  
 └── .env.example        # Exemplo de variáveis de ambiente
