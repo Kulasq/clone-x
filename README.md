@@ -7,8 +7,6 @@
 Clone X é uma rede social inspirada no Twitter, desenvolvida com Django e Bootstrap.  
 Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo agora.
 
-![Clone X Screenshot](https://via.placeholder.com/800x400/007bff/ffffff?text=Clone+X+Demo)
-
 ---
 
 ## ✨ Funcionalidades
@@ -63,11 +61,11 @@ Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo ag
 
 ```
 clone-x/
-├── accounts/           # App de autenticação e perfis  
+├── users/              # App de autenticação e perfis  
 ├── posts/              # App de postagens e interações  
 ├── core/               # Configurações principais do Django  
-├── static/             # Arquivos estáticos (CSS, JS, imagens)  
-├── templates/          # Templates HTML  
+   ├── static/          # Arquivos estáticos (CSS, JS, imagens)                
+   ├── templates/       # Templates HTML  
 ├── manage.py           # Script principal do Django  
 ├── requirements.txt    # Dependências do projeto  
 └── .env.example        # Exemplo de variáveis de ambiente
