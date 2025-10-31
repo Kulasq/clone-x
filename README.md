@@ -39,7 +39,7 @@ Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo ag
 
 ## 🚀 Demonstração
 
-**Acesse a aplicação:** [[Clone X](https://kulasqdev.pythonanywhere.com/)](#)
+**Acesse a aplicação:** [[Clone X](https://kulasqdev.pythonanywhere.com/)]
 
 **Credenciais de Teste:**
 - Usuário: `demo`  
