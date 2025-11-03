@@ -22,6 +22,11 @@
   --heading-color: #212529;
   --btn-outline-dark: #212529;
   --btn-dark: #212529;
+  --hover-bg: #f8f9fa;
+  --user-link-color: #212529;
+  --user-link-hover: #2E86AB;
+  --text-muted-light: #6c757d;
+  --text-muted-dark: #a0aec0;
 }
 
 /* Tema Escuro */
@@ -43,6 +48,11 @@
   --heading-color: #E9ECEF;
   --btn-outline-dark: #E9ECEF;
   --btn-dark: #E9ECEF;
+  --hover-bg: #2d3748;
+  --user-link-color: #E9ECEF;
+  --user-link-hover: #A8D0DB;
+  --text-muted-light: #6c757d;
+  --text-muted-dark: #a0aec0;
 }
 
 /* Transições suaves para mudanças de tema */
@@ -219,8 +229,19 @@ body::after {
 }
 
 .text-muted {
-  color: var(--text-color) !important;
-  opacity: 0.6;
+  color: var(--text-muted-light) !important;
+}
+
+[data-theme="dark"] .text-muted {
+  color: var(--text-muted-dark) !important;
+}
+
+.form-text {
+  color: var(--text-muted-light) !important;
+}
+
+[data-theme="dark"] .form-text {
+  color: var(--text-muted-dark) !important;
 }
 
 .alert-success {
@@ -266,6 +287,34 @@ a:hover {
 
 .landing-content .card ul li {
   color: var(--text-color);
+}
+
+/* Estilos específicos para página de busca de usuários */
+.user-card:hover {
+  background-color: var(--hover-bg);
+  border-radius: 8px;
+  padding: 8px;
+  margin: -8px;
+}
+
+.user-link {
+  color: var(--user-link-color) !important;
+}
+
+.user-link:hover {
+  color: var(--user-link-hover) !important;
+}
+
+.user-name,
+.user-username,
+.user-bio,
+.user-stats {
+  color: var(--text-color) !important;
+}
+
+/* Margens para cards de edição de perfil */
+.card.mb-4 {
+  margin-bottom: 1.5rem !important;
 }
 
 /* Botão de toggle tema */

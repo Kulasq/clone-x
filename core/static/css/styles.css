@@ -89,7 +89,7 @@ body {
 }
 
 .card .card-body .post-create-btn {
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     border: 1px solid #dee2e6 !important;
     background-color: #f8f9fa;
     color: #6c757d;
@@ -105,16 +105,16 @@ body {
 
 /* Profile Image Hover Effect */
 .flex-shrink-0 a {
-    transition: transform 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .flex-shrink-0 a:hover {
     transform: scale(1.05);
 }
 
-/* User Card Hover Effects (para search.html) */
+/* User Card Hover Effects - Unificado */
 .user-card {
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .user-card:hover {
@@ -122,6 +122,16 @@ body {
     border-radius: 8px;
     padding: 8px;
     margin: -8px;
+}
+
+/* Tema escuro para user-card */
+[data-theme="dark"] .user-card:hover {
+    background-color: #2d3748;
+}
+
+/* Profile Edit Container */
+.profile-edit-container {
+    margin-bottom: 3rem;
 }
 
 /* Mobile button adjustments */
