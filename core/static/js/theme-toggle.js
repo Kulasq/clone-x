@@ -1,5 +1,5 @@
 // ================================================
-// SISTEMA DE TOGGLE DE TEMA - CLONE X
+// SISTEMA DE TOGGLE DE TEMA - PSIu
 // ================================================
 
 class ThemeManager {
@@ -51,7 +51,7 @@ class ThemeManager {
         // Adicionar evento de clique
         button.addEventListener('click', () => this.toggleTheme());
 
-        // Inserir no navbar entre "Olá user" e "Buscar"
+        // Inserir no navbar entre "Olá user" e "Buscar" (para usuários logados)
         const navbarContent = document.querySelector('#navbarContent');
         if (navbarContent) {
             const desktopMenu = navbarContent.querySelector('.d-none.d-lg-flex');
@@ -77,10 +77,17 @@ class ThemeManager {
                 }
             }
         }
+
+        // Para usuários não logados, o botão já está no HTML, apenas atualizar
+        const existingButton = document.getElementById('theme-toggle');
+        if (existingButton) {
+            existingButton.innerHTML = this.theme === 'light' ? '🌙' : '☀️';
+            existingButton.addEventListener('click', () => this.toggleTheme());
+        }
     }
 
     updateToggleButton() {
-        const buttons = document.querySelectorAll('.theme-toggle');
+        const buttons = document.querySelectorAll('.theme-toggle, #theme-toggle');
         buttons.forEach(button => {
             button.innerHTML = this.theme === 'light' ? '🌙' : '☀️';
             button.setAttribute('aria-label',

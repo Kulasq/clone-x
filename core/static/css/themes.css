@@ -1,5 +1,5 @@
 /* ================================================
-   SISTEMA DE TEMAS - CLONE X
+   SISTEMA DE TEMAS - PSIu
    ================================================ */
 
 /* CSS Variables para temas */
@@ -19,6 +19,9 @@
   --alert-success: #d4edda;
   --alert-error: #f8d7da;
   --link-color: #2E86AB;
+  --heading-color: #212529;
+  --btn-outline-dark: #212529;
+  --btn-dark: #212529;
 }
 
 /* Tema Escuro */
@@ -37,6 +40,9 @@
   --alert-success: #1e3a2e;
   --alert-error: #3a1e1e;
   --link-color: #A8D0DB;
+  --heading-color: #E9ECEF;
+  --btn-outline-dark: #E9ECEF;
+  --btn-dark: #E9ECEF;
 }
 
 /* Transições suaves para mudanças de tema */
@@ -190,6 +196,28 @@ body::after {
   color: white;
 }
 
+.btn-outline-dark {
+  color: var(--btn-outline-dark);
+  border-color: var(--btn-outline-dark);
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--btn-outline-dark);
+  color: var(--bg-color);
+}
+
+.btn-dark {
+  background-color: var(--btn-dark);
+  border-color: var(--btn-dark);
+  color: var(--bg-color);
+}
+
+.btn-dark:hover {
+  background-color: var(--heading-color);
+  border-color: var(--heading-color);
+  color: var(--bg-color);
+}
+
 .text-muted {
   color: var(--text-color) !important;
   opacity: 0.6;
@@ -213,6 +241,31 @@ a {
 
 a:hover {
   color: var(--primary-color);
+}
+
+/* Estilos específicos para landing page */
+.landing-content h1,
+.landing-content .display-4 {
+  color: var(--heading-color);
+}
+
+.landing-content p,
+.landing-content .lead {
+  color: var(--text-color);
+}
+
+.landing-content .card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.landing-content .card h3 {
+  color: var(--heading-color);
+}
+
+.landing-content .card ul li {
+  color: var(--text-color);
 }
 
 /* Botão de toggle tema */

@@ -1,10 +1,10 @@
-# 🐦 Clone X
+# 🐦 Psiu
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-4.2-brightgreen.svg)](https://djangoproject.com)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com)
 
-Clone X é uma rede social inspirada no Twitter, desenvolvida com Django e Bootstrap.  
+Psiu é uma rede social inspirada no Twitter, desenvolvida com Django e Bootstrap.
 Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo agora.
 
 ---
@@ -12,62 +12,62 @@ Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo ag
 ## ✨ Funcionalidades
 
 ### 🔐 Autenticação & Perfil
-- **Registro e Login** — Sistema seguro de autenticação  
-- **Perfil Personalizável** — Foto, biografia, localização e website  
-- **Alteração de Senha** — Interface segura para atualização de credenciais  
-- **Exclusão de Conta** — Remoção completa dos dados do usuário  
+- **Registro e Login** — Sistema seguro de autenticação
+- **Perfil Personalizável** — Foto, biografia, localização e website
+- **Alteração de Senha** — Interface segura para atualização de credenciais
+- **Exclusão de Conta** — Remoção completa dos dados do usuário
 
 ### 📱 Feed & Conteúdo
-- **Feed Personalizado** — Posts de usuários que você segue + seus próprios posts  
-- **Criação de Posts** — Texto (até 280 caracteres) + imagens  
-- **Paginação** — Navegação suave entre páginas de posts  
-- **Upload de Imagens** — Otimização automática (máx. 800×400px)  
+- **Feed Personalizado** — Posts de usuários que você segue + seus próprios posts
+- **Criação de Posts** — Texto (até 280 caracteres) + imagens
+- **Paginação** — Navegação suave entre páginas de posts
+- **Upload de Imagens** — Otimização automática (máx. 800×400px)
 
 ### 💬 Interações Sociais
-- **Sistema de Likes** — Curta posts com atualização em tempo real (AJAX)  
-- **Comentários** — Adicione comentários aos posts  
-- **Seguir/Deixar de Seguir** — Conecte-se com outros usuários  
-- **Busca de Usuários** — Encontre pessoas por nome ou username  
+- **Sistema de Likes** — Curta posts com atualização em tempo real (AJAX)
+- **Comentários** — Adicione comentários aos posts
+- **Seguir/Deixar de Seguir** — Conecte-se com outros usuários
+- **Busca de Usuários** — Encontre pessoas por nome ou username
 
 ### 🎨 Interface
-- **Design Responsivo** — Funciona perfeitamente em desktop e mobile  
-- **Experiência Fluida** — AJAX para ações sem refresh de página  
-- **Bootstrap 5** — Interface moderna e acessível  
-- **Upload Otimizado** — Redimensionamento automático de imagens  
+- **Design Responsivo** — Funciona perfeitamente em desktop e mobile
+- **Experiência Fluida** — AJAX para ações sem refresh de página
+- **Bootstrap 5** — Interface moderna e acessível
+- **Upload Otimizado** — Redimensionamento automático de imagens
 
 ---
 
 ## 🚀 Demonstração
 
-**Acesse a aplicação:** [[Clone X](https://kulasqdev.pythonanywhere.com/)]
+**Acesse a aplicação:** [[Psiu](https://kulasqdev.pythonanywhere.com/)]
 
 **Credenciais de Teste:**
-- Usuário: `teste`  
+- Usuário: `teste`
 - Senha: `teste123`
 
 ---
 
 ## 🛠️ Tecnologias
 
-- **Backend:** Django 4.2, Python 3.8+  
-- **Frontend:** Bootstrap 5.3, JavaScript Vanilla  
-- **Banco de Dados:** SQLite (desenvolvimento) / PostgreSQL (produção)  
-- **Armazenamento:** Sistema de arquivos local / AWS S3 (produção)  
-- **Deploy:** Heroku, Railway ou PythonAnywhere  
+- **Backend:** Django 4.2, Python 3.8+
+- **Frontend:** Bootstrap 5.3, JavaScript Vanilla
+- **Banco de Dados:** SQLite (desenvolvimento) / PostgreSQL (produção)
+- **Armazenamento:** Sistema de arquivos local / AWS S3 (produção)
+- **Deploy:** Heroku, Railway ou PythonAnywhere
 
 ---
 
-## 🗂️ Estrutura do Projeto
+## 📂 Estrutura do Projeto
 
 ```
-clone-x/
-├── users/              # App de autenticação e perfis  
-├── posts/              # App de postagens e interações  
-├── core/               # Configurações principais do Django  
-   ├── static/          # Arquivos estáticos (CSS, JS, imagens)                
-   └── templates/       # Templates HTML  
-├── manage.py           # Script principal do Django  
-├── requirements.txt    # Dependências do projeto  
+psiu/
+├── users/              # App de autenticação e perfis
+├── posts/              # App de postagens e interações
+├── core/               # Configurações principais do Django
+   ├── static/          # Arquivos estáticos (CSS, JS, imagens)
+   └── templates/       # Templates HTML
+├── manage.py           # Script principal do Django
+├── requirements.txt    # Dependências do projeto
 └── .env.example        # Exemplo de variáveis de ambiente
 ```
 
@@ -76,16 +76,16 @@ clone-x/
 ## 📦 Instalação e Uso
 
 ### Pré-requisitos
-- Python 3.8 ou superior  
-- pip (gerenciador de pacotes Python)  
-- virtualenv (recomendado)  
+- Python 3.8 ou superior
+- pip (gerenciador de pacotes Python)
+- virtualenv (recomendado)
 
 ### 🏃‍♂️ Executando Localmente
 
 1. **Clone o repositório**
    ```bash
-   git clone https://github.com/Kulasq/clone-x.git
-   cd clone-x
+   git clone https://github.com/Kulasq/psiu.git
+   cd psiu
    ```
 
 2. **Configure o ambiente virtual**
@@ -167,20 +167,20 @@ coverage report
 
 ## 🤝 Contribuindo
 
-Contribuições são bem-vindas!  
-1. Faça um fork do projeto  
-2. Crie uma branch com sua feature (`git checkout -b feature/nova-feature`)  
-3. Faça commit das alterações (`git commit -m 'Adiciona nova feature'`)  
-4. Envie para o repositório (`git push origin feature/nova-feature`)  
+Contribuições são bem-vindas!
+1. Faça um fork do projeto
+2. Crie uma branch com sua feature (`git checkout -b feature/nova-feature`)
+3. Faça commit das alterações (`git commit -m 'Adiciona nova feature'`)
+4. Envie para o repositório (`git push origin feature/nova-feature`)
 5. Abra um Pull Request
 
 ---
 
 ## 📝 Licença
 
-Este projeto está sob a licença **MIT**.  
+Este projeto está sob a licença **MIT**.
 Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
 ---
 
-Feito com por [@Kulasq](https://github.com/Kulasq)
+Feito com ❤️ por [@Kulasq](https://github.com/Kulasq)
