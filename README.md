@@ -42,8 +42,8 @@ Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo ag
 **Acesse a aplicação:** [[Clone X](https://kulasqdev.pythonanywhere.com/)]
 
 **Credenciais de Teste:**
-- Usuário: `demo`  
-- Senha: `demopassword123`
+- Usuário: `teste`  
+- Senha: `teste123`
 
 ---
 
