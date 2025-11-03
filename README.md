@@ -84,8 +84,8 @@ psiu/
 
 1. **Clone o repositório**
    ```bash
-   git clone https://github.com/Kulasq/psiu.git
-   cd psiu
+   git clone https://github.com/Kulasq/clone-x.git
+   cd clone-x
    ```
 
 2. **Configure o ambiente virtual**
@@ -183,4 +183,4 @@ Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
 ---
 
-Feito com ❤️ por [@Kulasq](https://github.com/Kulasq)
+Feito por [@Kulasq](https://github.com/Kulasq)
