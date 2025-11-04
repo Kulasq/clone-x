@@ -4,10 +4,10 @@ from django.db import models
 from PIL import Image
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, db_index=True)
     profile_picture = models.ImageField(
         upload_to='profile_pics/',
-        blank=True, 
+        blank=True,
         null=True,
         verbose_name='Foto de Perfil'
     )
@@ -22,6 +22,13 @@ class CustomUser(AbstractUser):
         related_name='followers',
         blank=True
     )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['username']),
+            models.Index(fields=['email']),
+            models.Index(fields=['date_joined']),
+        ]
     
     # Métodos para o sistema de seguir
     def follow(self, user):

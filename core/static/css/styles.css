@@ -3,6 +3,7 @@ body {
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
 }
 
 .auth-container {
@@ -143,10 +144,75 @@ body {
     margin-bottom: 3rem;
 }
 
+/* Post Image Styles */
+.post-image {
+    max-width: 100%;
+    max-height: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Search input and button styling to match feed post creation */
+.search-input {
+    border: 1px solid #dee2e6 !important;
+    background-color: #f8f9fa;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    border-radius: 0.375rem 0 0 0.375rem !important;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.search-input:focus {
+    background-color: #ffffff !important;
+    border-color: #adb5bd !important;
+    color: #495057 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    outline: none;
+}
+
+.search-btn {
+    border: 1px solid #dee2e6 !important;
+    background-color: #f8f9fa;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    border-radius: 0 0.375rem 0.375rem 0 !important;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.search-btn:hover {
+    background-color: #ffffff !important;
+    border-color: #adb5bd !important;
+    color: #495057 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
 /* Mobile button adjustments */
 @media (max-width: 768px) {
     .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
+    }
+
+    .post-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .search-input, .search-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
     }
 }

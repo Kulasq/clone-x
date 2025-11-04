@@ -26,7 +26,13 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("users.urls")),
     path('posts/', include('posts.urls')),
+    path('api/theme/', views.theme_api_view, name='theme_api'),
 ]
 
+# Servir arquivos estáticos e de mídia
 if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+    # Em produção, WhiteNoise cuida dos estáticos, mas mídia precisa ser servida
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

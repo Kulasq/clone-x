@@ -2,32 +2,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-import re
 from .validators import StrongPasswordValidator
 
 User = get_user_model()
-
-def validate_strong_password(password):
-    """Valida se a senha atende aos critérios de segurança modernos."""
-    errors = []
-    
-    if len(password) < 8:
-        errors.append("Senha deve ter pelo menos 8 caracteres")
-    
-    if not re.search(r'[A-Z]', password):
-        errors.append("Inclua pelo menos uma letra maiúscula")
-    
-    if not re.search(r'[a-z]', password):
-        errors.append("Inclua pelo menos uma letra minúscula")
-    
-    if not re.search(r'\d', password):
-        errors.append("Inclua pelo menos um número")
-    
-    if not re.search(r'[@$!%*?&]', password):
-        errors.append("Inclua pelo menos um caractere especial (@$!%*?&)")
-    
-    if errors:
-        raise ValidationError(errors)
 
 def validate_username_no_spaces(value):
     """Valida se o username não contém espaços."""

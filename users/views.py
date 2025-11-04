@@ -145,15 +145,15 @@ def user_search_view(request):
     query = request.GET.get('q', '').strip()
     users = []
     suggested_users = []
-    
+
     if query:
         # Busca por username, primeiro nome ou último nome
         users = User.objects.filter(
             Q(username__icontains=query) |
             Q(first_name__icontains=query) |
             Q(last_name__icontains=query)
-        ).exclude(id=request.user.id if request.user.is_authenticated else None)
-        results_count = users.count()  
+        ).exclude(id=request.user.id if request.user.is_authenticated else None).select_related()
+        results_count = users.count()
     else:
         # Sugere usuários quando não há busca
         if request.user.is_authenticated:
@@ -161,12 +161,12 @@ def user_search_view(request):
         else:
             suggested_users = User.objects.all()[:6]
         results_count = 0
-    
+
     return render(request, 'users/search.html', {
         'query': query,
         'users': users,
         'suggested_users': suggested_users,
-        'results_count': results_count 
+        'results_count': results_count
     })
 
 @login_required

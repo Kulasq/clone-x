@@ -31,19 +31,19 @@ def post_list_view(request):
         # Posts de quem você segue + seus próprios posts
         following_ids = list(request.user.following.values_list('id', flat=True))
         following_ids.append(request.user.id)  # Inclui o próprio usuário
-        
+
         posts = Post.objects.filter(
             user_id__in=following_ids
-        ).select_related('user').order_by('-created_at')
+        ).select_related('user').prefetch_related('likes', 'comments').order_by('-created_at')
     else:
-        posts = Post.objects.all().select_related('user').order_by('-created_at')
-    
+        posts = Post.objects.all().select_related('user').prefetch_related('likes', 'comments').order_by('-created_at')
+
     # Paginação - 10 posts por página
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
-    return render(request, 'posts/feed.html', {'page_obj': page_obj})
+
+    return render(request, 'posts/feed.html', {'page_obj': page_obj, 'is_personalized_feed': request.user.is_authenticated})
 
 def post_detail_view(request, pk):
     """Detalhes de um post específico"""
