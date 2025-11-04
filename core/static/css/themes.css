@@ -337,3 +337,125 @@ a:hover {
     margin-top: 0.5rem;
   }
 }
+
+/* ================================================
+  BOTÕES DE LIKE E COMENTÁRIO
+   ================================================ */
+
+/* Contador de likes - sempre visível e com bom contraste */
+.like-count {
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-left: 2px;
+}
+
+/* Tema claro - contador sempre escuro para contraste */
+[data-theme="light"] .like-count {
+    color: #495057 !important;
+}
+
+/* Tema escuro - contador sempre claro para contraste */
+[data-theme="dark"] .like-count {
+    color: #e9ecef !important;
+}
+
+/* Botão de like não curtido - tema claro */
+[data-theme="light"] .btn-outline-secondary.like-btn {
+    color: #6c757d;
+    border-color: #dee2e6;
+    background-color: transparent;
+}
+
+[data-theme="light"] .btn-outline-secondary.like-btn:hover {
+    color: #495057;
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+[data-theme="light"] .btn-outline-secondary.like-btn .like-count {
+    color: #6c757d !important;
+}
+
+[data-theme="light"] .btn-outline-secondary.like-btn:hover .like-count {
+    color: #495057 !important;
+}
+
+/* Botão de like não curtido - tema escuro */
+[data-theme="dark"] .btn-outline-secondary.like-btn {
+    color: #94a3b8;
+    border-color: #475569;
+    background-color: transparent;
+}
+
+[data-theme="dark"] .btn-outline-secondary.like-btn:hover {
+    color: #e2e8f0;
+    background-color: #334155;
+    border-color: #64748b;
+}
+
+[data-theme="dark"] .btn-outline-secondary.like-btn .like-count {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary.like-btn:hover .like-count {
+    color: #e2e8f0 !important;
+}
+
+/* Botão de like curtido - sempre vermelho */
+.btn-danger.like-btn {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-danger.like-btn:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+}
+
+.btn-danger.like-btn .like-count {
+    color: white !important;
+}
+
+/* Botão de comentário - sempre consistente */
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #dee2e6;
+    background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+    color: #495057;
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+    color: #94a3b8;
+    border-color: #475569;
+    background-color: transparent;
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    color: #e2e8f0;
+    background-color: #334155;
+    border-color: #64748b;
+}
+
+/* Contadores de comentários - mesmo estilo dos likes */
+.btn-outline-secondary .like-count {
+    color: inherit !important;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-left: 2px;
+}
+
+[data-theme="dark"] .btn-outline-secondary .like-count {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover .like-count {
+    color: #e2e8f0 !important;
+}

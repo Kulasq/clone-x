@@ -74,7 +74,7 @@
                         <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline like-form" data-post-id="{{ post.pk }}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %} like-btn">
-                                ❤️ <span class="like-count text-muted">{{ post.likes_count }}</span>
+                                ❤️ <span class="like-count {% if request.user in post.likes.all %}text-white{% else %}text-dark{% endif %}">{{ post.likes_count }}</span>
                             </button>
                         </form>
 

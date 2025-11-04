@@ -105,7 +105,7 @@
                             </form>
 
                             <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
-                                💬 {{ post.comments_count }}
+                                💬 <span class="like-count text-muted">{{ post.comments_count }}</span>
                             </a>
                         </div>
 
