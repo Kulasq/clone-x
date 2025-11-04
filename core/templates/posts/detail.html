@@ -50,7 +50,7 @@
                         </form>
 
                         <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
-                            💬 {{ post.comments_count }}
+                            💬 <span class="like-count text-muted">{{ post.comments_count }}</span>
                         </a>
                     </div>
 
@@ -84,7 +84,7 @@
         {% endif %}
 
         <!-- Lista de Comentários -->
-        <div class="card shadow-sm">
+        <div class="card shadow-sm mb-4">
             <div class="card-header">
                 <h6 class="mb-0">Comentários ({{ post.comments_count }})</h6>
             </div>
