@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Feed | Clone X{% endblock %}
+{% block title %}Feed | Psiu{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -12,10 +12,10 @@
                     <div class="flex-shrink-0">
                         <a href="{% url 'profile' %}" class="text-decoration-none">
                             {% if user.profile_picture %}
-                                <img src="{{ user.profile_picture.url }}" alt="Foto de perfil" 
+                                <img src="{{ user.profile_picture.url }}" alt="Foto de perfil"
                                     class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                             {% else %}
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
                                     style="width: 50px; height: 50px;">
                                     <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
                                 </div>
@@ -41,16 +41,16 @@
                     <div class="d-flex align-items-center">
                         <a href="{% url 'public_profile' post.user.username %}" class="text-decoration-none d-flex align-items-center">
                             {% if post.user.profile_picture %}
-                                <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil" 
+                                <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil"
                                     class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
                             {% else %}
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2"
                                     style="width: 40px; height: 40px;">
                                     <span class="text-white fw-bold small">{{ post.user.username|first|upper }}</span>
                                 </div>
                             {% endif %}
                             <div>
-                                <h6 class="mb-0 fw-bold text-dark">{{ post.user.get_full_name|default:post.user.username }}</h6>
+                                <h6 class="mb-0 fw-bold" style="color: var(--text-color);">{{ post.user.get_full_name|default:post.user.username }}</h6>
                                 <small class="text-muted">@{{ post.user.username }}</small>
                             </div>
                         </a>
@@ -74,17 +74,17 @@
                         <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline like-form" data-post-id="{{ post.pk }}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %} like-btn">
-                                ❤️ <span class="like-count">{{ post.likes_count }}</span>
+                                ❤️ <span class="like-count text-muted">{{ post.likes_count }}</span>
                             </button>
                         </form>
-                        
-                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outside-secondary">
-                            💬 {{ post.comments_count }}
+
+                        <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
+                            💬 <span class="like-count text-muted">{{ post.comments_count }}</span>
                         </a>
                     </div>
-                    
+
                     {% if user == post.user %}
-                    <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outside-danger">
+                    <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
                         🗑️
                     </a>
                     {% endif %}
@@ -159,7 +159,7 @@
                     </li>
                 {% endif %}
             </ul>
-            
+
             <!-- Informação da página atual -->
             <div class="text-center mt-2">
                 <small class="text-muted">

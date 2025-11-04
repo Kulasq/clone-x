@@ -114,19 +114,28 @@ body {
 
 /* User Card Hover Effects - Unificado */
 .user-card {
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 .user-card:hover {
     background-color: #f8f9fa;
     border-radius: 8px;
-    padding: 8px;
-    margin: -8px;
 }
 
 /* Tema escuro para user-card */
 [data-theme="dark"] .user-card:hover {
     background-color: #2d3748;
+}
+
+/* Container para user list */
+.user-list-container {
+    padding-bottom: 8px;
+}
+
+/* Container específico para usuários sugeridos */
+.suggested-users-container {
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 /* Profile Edit Container */
