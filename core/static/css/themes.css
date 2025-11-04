@@ -67,7 +67,6 @@
 /* Tema Claro - Gradiente vertical com nuvens e sol em xilogravura */
 body {
   background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 100%);
-  background-attachment: fixed;
   position: relative;
   min-height: 100vh;
 }
@@ -110,7 +109,6 @@ body::after {
 /* Tema Escuro - Céu estrelado */
 [data-theme="dark"] body {
   background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-  background-attachment: fixed;
 }
 
 [data-theme="dark"] body::before {
