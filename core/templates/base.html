@@ -21,7 +21,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <!-- Logo -->
-            <a class="navbar-brand fw-bold" href="{% url 'home' %}">Psiu</a>
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+                <img src="{% static 'img/favicon/favicon-32x32.png' %}" alt="Psiu" width="24" height="24" class="me-2">
+                Psiu
+            </a>
 
             <!-- Botão Hamburguer -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -83,6 +86,7 @@
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
