@@ -114,3 +114,40 @@ class ThemeManager {
 document.addEventListener('DOMContentLoaded', () => {
     new ThemeManager();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    
+    if (navbarCollapse && navbarToggler) {
+        // Fechar navbar ao clicar em links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
+                    // Usar o Bootstrap para fechar com animação
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                        toggle: false
+                    });
+                    bsCollapse.hide();
+                }
+            });
+        });
+        
+        // Fechar navbar ao clicar fora
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth < 992) {
+                const isClickInsideNavbar = event.target.closest('.navbar');
+                const isNavbarToggler = event.target.closest('.navbar-toggler');
+                
+                if (!isClickInsideNavbar && !isNavbarToggler && navbarCollapse.classList.contains('show')) {
+                    // Usar o Bootstrap para fechar com animação
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                        toggle: false
+                    });
+                    bsCollapse.hide();
+                }
+            }
+        });
+    }
+});
