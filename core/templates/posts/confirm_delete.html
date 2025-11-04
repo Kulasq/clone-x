@@ -33,7 +33,9 @@
                         </div>
                         <p class="card-text">{{ post.content }}</p>
                         {% if post.image %}
-                            <img src="{{ post.image.url }}" alt="Imagem do post" class="img-fluid rounded mb-2">
+                        <div class="mb-3 text-center">
+                            <img src="{{ post.image.url }}" alt="Imagem do post" class="img-fluid rounded post-image">
+                        </div>
                         {% endif %}
                         <small class="text-muted">{{ post.created_at|timesince }} atrás</small>
                     </div>

@@ -31,9 +31,22 @@ class ThemeManager {
     }
 
     applyTheme() {
+        // Aplicar tema no HTML element
         document.documentElement.setAttribute('data-theme', this.theme);
         localStorage.setItem('theme', this.theme);
         this.updateToggleButton();
+
+        // Sincronizar com sessão do Django (opcional, para persistência server-side)
+        fetch('/api/theme/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+            },
+            body: JSON.stringify({ theme: this.theme })
+        }).catch(() => {
+            // Ignorar erros de sincronização - o tema ainda funciona via localStorage
+        });
     }
 
     toggleTheme() {

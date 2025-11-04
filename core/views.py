@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+import json
 from posts.models import Post
 from django.db import models
 
@@ -25,3 +29,17 @@ def home_view(request):
     else:
         # Usuário não logado: mostra landing page
         return render(request, 'core/landing.html')
+
+@csrf_exempt
+@require_POST
+def theme_api_view(request):
+    """API endpoint para sincronizar tema com sessão do Django"""
+    try:
+        data = json.loads(request.body)
+        theme = data.get('theme')
+        if theme in ['light', 'dark']:
+            request.session['theme'] = theme
+            return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'error', 'message': 'Invalid theme'}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)

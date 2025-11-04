@@ -64,14 +64,14 @@ class Post(models.Model):
         """Otimiza e redimensiona a imagem do post com limites de tamanho"""
         img_path = self.image.path
         img = Image.open(img_path)
-        
+
         # Define os limites máximos
-        max_width = 800
-        max_height = 400
-        
+        max_width = 1200
+        max_height = 800
+
         # Verifica se precisa redimensionar
         needs_resize = img.width > max_width or img.height > max_height
-        
+
         if needs_resize:
             # Calcula as novas dimensões mantendo o aspect ratio
             if img.width / max_width > img.height / max_height:
@@ -84,13 +84,18 @@ class Post(models.Model):
                 ratio = max_height / img.height
                 new_height = max_height
                 new_width = int(img.width * ratio)
-            
+
             # Aplica o redimensionamento
             output_size = (new_width, new_height)
             img = img.resize(output_size, Image.Resampling.LANCZOS)
             img.save(img_path, optimize=True, quality=85)
-        
+
         elif img.format in ['JPEG', 'JPG']:
+            img.save(img_path, optimize=True, quality=85)
+
+        # Converte para RGB se necessário (para compatibilidade)
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
             img.save(img_path, optimize=True, quality=85)
     
     class Meta:

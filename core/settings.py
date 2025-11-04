@@ -12,19 +12,31 @@ load_dotenv()  # Carrega variáveis do .env (apenas local)
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 # ================================================
-# 🔒 SEGURANÇA
+# 🔒 SEGURANÇA - REVISADA
 # ================================================
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
-DEBUG = os.getenv("DEBUG", "True") == "True"
+# SECRET_KEY com validação rigorosa
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    if ENVIRONMENT == "production":
+        raise ValueError("SECRET_KEY must be set in production environment!")
+    else:
+        # Gera uma secret key temporária para desenvolvimento
+        from django.core.management.utils import get_random_secret_key
+        SECRET_KEY = get_random_secret_key()
+        print("⚠️  Using temporary SECRET_KEY for development")
 
+# DEBUG com validação segura
+DEBUG = ENVIRONMENT == "development"
+
+# ALLOWED_HOSTS validados por ambiente
+ALLOWED_HOSTS = []
 if ENVIRONMENT == "production":
-    DEBUG = False
-
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "kulasqdev.pythonanywhere.com",
-]
+    ALLOWED_HOSTS = [
+        "kulasqdev.pythonanywhere.com",
+        ".pythonanywhere.com",  # Para subdomínios
+    ]
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 # ================================================
 # 🔌 APLICATIVOS
@@ -126,14 +138,15 @@ USE_I18N = True
 USE_TZ = True
 
 # ================================================
-# 🖼️ ARQUIVOS ESTÁTICOS E DE MÍDIA
+# 🖼️ ARQUIVOS ESTÁTICOS E DE MÍDIA - REVISADO
 # ================================================
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
 if ENVIRONMENT == "production":
-    STATIC_ROOT = "/home/kulasqdev/clone-x/staticfiles"
-    MEDIA_ROOT = "/home/kulasqdev/clone-x/media"
+    # Usando BASE_DIR para evitar problemas de caminho absoluto
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
@@ -148,6 +161,11 @@ LOGIN_URL = "/users/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/users/login/"
 
+# Configurações de sessão mais seguras
+SESSION_COOKIE_AGE = 1209600  # 2 semanas
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 # Configurações de email
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
 EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -158,22 +176,46 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@clone-x.com")
 
 # ================================================
-# 🧱 SEGURANÇA EXTRA (produção)
+# 🧱 SEGURANÇA EXTRA (produção) - CORRIGIDO
 # ================================================
+# CONFIGURAÇÕES QUE DEVEM SER APLICADAS SEMPRE QUE EM PRODUÇÃO
+# Mas com verificações para evitar problemas em desenvolvimento
+
+# SSL/HTTPS (só em produção)
+SECURE_SSL_REDIRECT = ENVIRONMENT == "production"
+
+# HSTS (só em produção com SSL)
 if ENVIRONMENT == "production":
-    SECURE_SSL_REDIRECT = True
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = "DENY"
-    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_SECONDS = 31536000  # 1 ano
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+else:
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+
+# Cookies seguros (só em produção)
+SESSION_COOKIE_SECURE = ENVIRONMENT == "production"
+CSRF_COOKIE_SECURE = ENVIRONMENT == "production"
+
+# Headers de segurança (sempre ativos - são seguros em desenvolvimento também)
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+
+# CSRF trusted origins (só em produção)
+if ENVIRONMENT == "production":
+    CSRF_TRUSTED_ORIGINS = [
+        "https://kulasqdev.pythonanywhere.com",
+    ]
 
 # ================================================
 # 📝 LOGGING
 # ================================================
+# Criar diretório de logs se não existir
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -191,7 +233,7 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": os.path.join(BASE_DIR, "logs", "django.log"),
+            "filename": os.path.join(LOG_DIR, "django.log"),
             "maxBytes": 5 * 1024 * 1024,  # 5 MB
             "backupCount": 3,  # Mantém 3 arquivos antigos
             "formatter": "verbose",

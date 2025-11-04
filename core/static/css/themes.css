@@ -1,5 +1,5 @@
 /* ================================================
-   SISTEMA DE TEMAS - PSIu
+  SISTEMA DE TEMAS - PSIu
    ================================================ */
 
 /* CSS Variables para temas */
@@ -61,7 +61,7 @@
 }
 
 /* ================================================
-   BACKGROUNDS DOS TEMAS
+  BACKGROUNDS DOS TEMAS
    ================================================ */
 
 /* Tema Claro - Gradiente vertical com nuvens e sol em xilogravura */
@@ -166,7 +166,7 @@ body::after {
 }
 
 /* ================================================
-   COMPONENTES COM VARIÁVEIS
+  COMPONENTES COM VARIÁVEIS
    ================================================ */
 
 .navbar {

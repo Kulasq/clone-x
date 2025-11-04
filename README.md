@@ -1,11 +1,14 @@
 # 🐦 Psiu
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
-[![Django](https://img.shields.io/badge/Django-4.2-brightgreen.svg)](https://djangoproject.com)
+[![Django](https://img.shields.io/badge/Django-5.2-brightgreen.svg)](https://djangoproject.com)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg)](https://getbootstrap.com)
+[![Tests](https://img.shields.io/badge/Tests-30%20OK-success.svg)](https://github.com/Kulasq/clone-x)
 
 Psiu é uma rede social inspirada no Twitter, desenvolvida com Django e Bootstrap.
 Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo agora.
+
+**🚀 Pronto para Produção** - Otimizado com cache, índices de BD, validações de segurança e 30+ testes automatizados.
 
 ---
 
@@ -43,17 +46,19 @@ Compartilhe ideias, interaja em tempo real e descubra o que está acontecendo ag
 
 **Credenciais de Teste:**
 - Usuário: `teste`
-- Senha: `teste123`
+- Senha: `teste123.`
 
 ---
 
 ## 🛠️ Tecnologias
 
-- **Backend:** Django 4.2, Python 3.8+
+- **Backend:** Django 5.2, Python 3.8+
 - **Frontend:** Bootstrap 5.3, JavaScript Vanilla
 - **Banco de Dados:** SQLite (desenvolvimento) / PostgreSQL (produção)
 - **Armazenamento:** Sistema de arquivos local / AWS S3 (produção)
 - **Deploy:** Heroku, Railway ou PythonAnywhere
+- **Cache:** Django LocMemCache
+- **Logs:** RotatingFileHandler para produção
 
 ---
 
@@ -137,7 +142,7 @@ psiu/
 DEBUG=True
 SECRET_KEY=sua-chave-secreta-aqui
 DATABASE_URL=sqlite:///db.sqlite3
-ALLOWED_HOSTS=localhost,127.0.0.1
+ALLOWED_HOSTS=localhost,127.0.0.1:8000
 ```
 
 ### Para Produção
@@ -146,6 +151,16 @@ DEBUG=False
 SECRET_KEY=sua-chave-secreta-muito-longa
 DATABASE_URL=postgres://usuario:senha@host:porta/nome_do_banco
 ALLOWED_HOSTS=seudominio.com,www.seudominio.com
+
+# Configurações adicionais para produção
+STATIC_ROOT=/caminho/para/staticfiles
+MEDIA_ROOT=/caminho/para/media
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=seu-email@gmail.com
+EMAIL_HOST_PASSWORD=sua-senha-app
 ```
 
 ---
