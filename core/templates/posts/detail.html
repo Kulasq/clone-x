@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Post de {{ post.user.username }} | Clone X{% endblock %}
+{% block title %}Post de {{ post.user.username }} | Psiu{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -12,16 +12,16 @@
                     <div class="d-flex align-items-center">
                         <a href="{% url 'public_profile' post.user.username %}" class="text-decoration-none d-flex align-items-center">
                             {% if post.user.profile_picture %}
-                                <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil" 
+                                <img src="{{ post.user.profile_picture.url }}" alt="Foto de perfil"
                                     class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
                             {% else %}
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2" 
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2"
                                     style="width: 40px; height: 40px;">
                                     <span class="text-white fw-bold small">{{ post.user.username|first|upper }}</span>
                                 </div>
                             {% endif %}
                             <div>
-                                <h6 class="mb-0 fw-bold text-dark">{{ post.user.get_full_name|default:post.user.username }}</h6>
+                                <h6 class="mb-0 fw-bold" style="color: var(--text-color);">{{ post.user.get_full_name|default:post.user.username }}</h6>
                                 <small class="text-muted">@{{ post.user.username }}</small>
                             </div>
                         </a>
@@ -45,15 +45,15 @@
                         <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %}">
-                                ❤️ {{ post.likes_count }}
+                                ❤️ <span class="text-muted">{{ post.likes_count }}</span>
                             </button>
                         </form>
-                        
+
                         <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
                             💬 {{ post.comments_count }}
                         </a>
                     </div>
-                    
+
                     {% if user == post.user %}
                     <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
                         🗑️
@@ -71,7 +71,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="commentContent" class="form-label">Adicionar comentário</label>
-                        <textarea class="form-control" id="commentContent" name="content" 
+                        <textarea class="form-control" id="commentContent" name="content"
                                 rows="3" placeholder="Escreva seu comentário..." maxlength="280" required></textarea>
                         <div class="form-text">
                             <span id="commentCharCount">0</span>/280 caracteres
@@ -93,10 +93,10 @@
                 <div class="d-flex mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
                     <div class="flex-shrink-0">
                         {% if comment.user.profile_picture %}
-                            <img src="{{ comment.user.profile_picture.url }}" alt="Foto de perfil" 
+                            <img src="{{ comment.user.profile_picture.url }}" alt="Foto de perfil"
                                 class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
                         {% else %}
-                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center"
                                 style="width: 35px; height: 35px;">
                                 <span class="text-white fw-bold small">{{ comment.user.username|first|upper }}</span>
                             </div>
@@ -113,7 +113,7 @@
                                 {% if user == comment.user or user == post.user %}
                                 <form action="{% url 'delete_comment' comment.pk %}" method="POST" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-outline-danger p-1" 
+                                    <button type="submit" class="btn btn-sm btn-outline-danger p-1"
                                             onclick="return confirm('Tem certeza que deseja excluir este comentário?')">
                                         🗑️
                                     </button>
@@ -137,7 +137,7 @@
     document.getElementById('commentContent').addEventListener('input', function() {
         const charCount = this.value.length;
         document.getElementById('commentCharCount').textContent = charCount;
-        
+
         if (charCount > 280) {
             document.getElementById('commentCharCount').classList.add('text-danger');
         } else {

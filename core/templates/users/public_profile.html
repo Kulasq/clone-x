@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Perfil de {{ profile_user.username }} | Clone X{% endblock %}
+{% block title %}Perfil de {{ profile_user.username }} | Psiu{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -23,53 +23,53 @@
                         </form>
                     {% endif %}
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-3 text-center">
                         {% if profile_user.profile_picture %}
-                            <img src="{{ profile_user.profile_picture.url }}" alt="Foto de perfil" 
+                            <img src="{{ profile_user.profile_picture.url }}" alt="Foto de perfil"
                                 class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                         {% else %}
-                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto" 
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3 mx-auto"
                                 style="width: 150px; height: 150px;">
                                 <span class="text-white fw-bold fs-1">{{ profile_user.username|first|upper }}</span>
                             </div>
                         {% endif %}
                     </div>
-                    
+
                     <div class="col-md-9">
                         <h5 class="fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}</h5>
                         <p class="text-muted">@{{ profile_user.username }}</p>
-                        
+
                         {% if profile_user.bio %}
                             <p class="mb-3">{{ profile_user.bio }}</p>
                         {% else %}
                             <p class="text-muted mb-3">Nenhuma biografia adicionada.</p>
                         {% endif %}
-                        
+
                         <div class="row text-center">
                             <div class="col-4">
-                                <strong class="fs-5">{{ profile_user.posts.count }}</strong>
+                                <strong class="fs-5" style="color: var(--text-color);">{{ profile_user.posts.count }}</strong>
                                 <p class="text-muted mb-0">Posts</p>
                             </div>
                             <div class="col-4">
                                 <a href="{% url 'followers_list' profile_user.username %}" class="text-decoration-none">
-                                    <strong class="fs-5">{{ profile_user.followers_count }}</strong>
+                                    <strong class="fs-5" style="color: var(--text-color);">{{ profile_user.followers_count }}</strong>
                                     <p class="text-muted mb-0">Seguidores</p>
                                 </a>
                             </div>
                             <div class="col-4">
                                 <a href="{% url 'following_list' profile_user.username %}" class="text-decoration-none">
-                                    <strong class="fs-5">{{ profile_user.following_count }}</strong>
+                                    <strong class="fs-5" style="color: var(--text-color);">{{ profile_user.following_count }}</strong>
                                     <p class="text-muted mb-0">Seguindo</p>
                                 </a>
                             </div>
                         </div>
-                        
+
                         {% if profile_user.location %}
                             <p class="mt-3 mb-1">{{ profile_user.location }}</p>
                         {% endif %}
-                        
+
                         {% if profile_user.website %}
                             <p class="mb-0">
                                 <a href="{{ profile_user.website }}" target="_blank">{{ profile_user.website }}</a>
@@ -82,7 +82,7 @@
 
         <!-- Posts do usuário -->
         <div class="mt-4">
-            <h5 class="mb-3">Posts de {{ profile_user.username }}</h5>
+            <h5 class="mb-3" style="color: var(--text-color);">Posts de {{ profile_user.username }}</h5>
             {% for post in profile_user.posts.all %}
             <div class="card shadow-sm mb-3">
                 <div class="card-body">
@@ -98,15 +98,15 @@
                             <form action="{% url 'post_like' post.pk %}" method="POST" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm {% if request.user in post.likes.all %}btn-danger{% else %}btn-outline-secondary{% endif %}">
-                                    ❤️ {{ post.likes_count }}
+                                    ❤️ <span class="text-muted"></span>{{ post.likes_count }}</span>
                                 </button>
                             </form>
-                            
+
                             <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">
                                 💬 {{ post.comments_count }}
                             </a>
                         </div>
-                        
+
                         {% if user == post.user %}
                         <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">
                             🗑️

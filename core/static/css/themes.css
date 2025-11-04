@@ -1,0 +1,341 @@
+/* ================================================
+   SISTEMA DE TEMAS - PSIu
+   ================================================ */
+
+/* CSS Variables para temas */
+:root {
+  /* Tema Claro */
+  --primary-color: #2E86AB;
+  --secondary-color: #F76C5E;
+  --text-color: #212529;
+  --bg-color: #F8F9FA;
+  --card-bg: #ffffff;
+  --border-color: #dee2e6;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --navbar-bg: #343a40;
+  --navbar-text: #ffffff;
+  --btn-primary: #2E86AB;
+  --btn-secondary: #6c757d;
+  --alert-success: #d4edda;
+  --alert-error: #f8d7da;
+  --link-color: #2E86AB;
+  --heading-color: #212529;
+  --btn-outline-dark: #212529;
+  --btn-dark: #212529;
+  --hover-bg: #f8f9fa;
+  --user-link-color: #212529;
+  --user-link-hover: #2E86AB;
+  --text-muted-light: #6c757d;
+  --text-muted-dark: #a0aec0;
+}
+
+/* Tema Escuro */
+[data-theme="dark"] {
+  --primary-color: #A8D0DB;
+  --secondary-color: #FF9A8B;
+  --text-color: #E9ECEF;
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --border-color: #334155;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --navbar-bg: #0f172a;
+  --navbar-text: #E9ECEF;
+  --btn-primary: #A8D0DB;
+  --btn-secondary: #64748b;
+  --alert-success: #1e3a2e;
+  --alert-error: #3a1e1e;
+  --link-color: #A8D0DB;
+  --heading-color: #E9ECEF;
+  --btn-outline-dark: #E9ECEF;
+  --btn-dark: #E9ECEF;
+  --hover-bg: #2d3748;
+  --user-link-color: #E9ECEF;
+  --user-link-hover: #A8D0DB;
+  --text-muted-light: #6c757d;
+  --text-muted-dark: #a0aec0;
+}
+
+/* Transições suaves para mudanças de tema */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ================================================
+   BACKGROUNDS DOS TEMAS
+   ================================================ */
+
+/* Tema Claro - Gradiente vertical com nuvens e sol em xilogravura */
+body {
+  background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 100%);
+  background-attachment: fixed;
+  position: relative;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.4) 0%, transparent 50%);
+  background-size: 300px 300px, 400px 400px, 200px 200px;
+  background-position: 0% 0%, 100% 100%, 50% 50%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: -1;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/img/patterns/background.image.png');
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  background-position: center;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Tema Escuro - Céu estrelado */
+[data-theme="dark"] body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    /* Estrelas pequenas */
+    radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 160px 20px, #fff, transparent),
+    radial-gradient(1px 1px at 200px 60px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 250px 90px, #fff, transparent),
+    radial-gradient(2px 2px at 280px 30px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 320px 70px, #fff, transparent),
+    radial-gradient(1px 1px at 360px 40px, rgba(255,255,255,0.5), transparent),
+    radial-gradient(2px 2px at 400px 80px, #fff, transparent),
+    radial-gradient(1px 1px at 450px 20px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 480px 60px, #fff, transparent),
+    radial-gradient(2px 2px at 520px 90px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 560px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 600px 70px, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 640px 40px, #fff, transparent),
+    radial-gradient(1px 1px at 680px 80px, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 720px 20px, #fff, transparent),
+    radial-gradient(2px 2px at 760px 60px, rgba(255,255,255,0.5), transparent),
+    /* Estrelas médias com brilho */
+    radial-gradient(3px 3px at 100px 100px, #fff, transparent),
+    radial-gradient(3px 3px at 300px 150px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(4px 4px at 500px 120px, #fff, transparent),
+    radial-gradient(3px 3px at 700px 180px, rgba(255,255,255,0.7), transparent);
+  background-repeat: repeat;
+  background-size: 800px 200px;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Remover sol do tema escuro */
+[data-theme="dark"] body::after {
+  display: none;
+}
+
+/* Animação de brilho das estrelas */
+@keyframes twinkle {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* ================================================
+   COMPONENTES COM VARIÁVEIS
+   ================================================ */
+
+.navbar {
+  background-color: var(--navbar-bg) !important;
+  color: var(--navbar-text) !important;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .text-white {
+  color: var(--navbar-text) !important;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.btn-primary {
+  background-color: var(--btn-primary);
+  border-color: var(--btn-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-secondary {
+  color: var(--btn-secondary);
+  border-color: var(--btn-secondary);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--btn-secondary);
+  color: white;
+}
+
+.btn-outline-dark {
+  color: var(--btn-outline-dark);
+  border-color: var(--btn-outline-dark);
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--btn-outline-dark);
+  color: var(--bg-color);
+}
+
+.btn-dark {
+  background-color: var(--btn-dark);
+  border-color: var(--btn-dark);
+  color: var(--bg-color);
+}
+
+.btn-dark:hover {
+  background-color: var(--heading-color);
+  border-color: var(--heading-color);
+  color: var(--bg-color);
+}
+
+.text-muted {
+  color: var(--text-muted-light) !important;
+}
+
+[data-theme="dark"] .text-muted {
+  color: var(--text-muted-dark) !important;
+}
+
+.form-text {
+  color: var(--text-muted-light) !important;
+}
+
+[data-theme="dark"] .form-text {
+  color: var(--text-muted-dark) !important;
+}
+
+.alert-success {
+  background-color: var(--alert-success);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.alert-danger {
+  background-color: var(--alert-error);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+/* Estilos específicos para landing page */
+.landing-content h1,
+.landing-content .display-4 {
+  color: var(--heading-color);
+}
+
+.landing-content p,
+.landing-content .lead {
+  color: var(--text-color);
+}
+
+.landing-content .card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.landing-content .card h3 {
+  color: var(--heading-color);
+}
+
+.landing-content .card ul li {
+  color: var(--text-color);
+}
+
+/* Estilos específicos para página de busca de usuários */
+.user-card:hover {
+  background-color: var(--hover-bg);
+  border-radius: 8px;
+  padding: 8px;
+  margin: -8px;
+}
+
+.user-link {
+  color: var(--user-link-color) !important;
+}
+
+.user-link:hover {
+  color: var(--user-link-hover) !important;
+}
+
+.user-name,
+.user-username,
+.user-bio,
+.user-stats {
+  color: var(--text-color) !important;
+}
+
+/* Margens para cards de edição de perfil */
+.card.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Botão de toggle tema */
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--navbar-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 991.98px) {
+  .theme-toggle {
+    margin-top: 0.5rem;
+  }
+}
