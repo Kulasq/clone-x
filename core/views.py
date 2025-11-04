@@ -11,13 +11,13 @@ def home_view(request):
         following_users = request.user.following.all()
         posts = Post.objects.filter(
             models.Q(user=request.user) | models.Q(user__in=following_users)
-        ).select_related('user').order_by('-created_at')
-        
+        ).select_related('user').prefetch_related('likes', 'comments').order_by('-created_at')
+
         # Paginação
         paginator = Paginator(posts, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        
+
         return render(request, 'posts/feed.html', {
             'page_obj': page_obj,
             'is_personalized_feed': True

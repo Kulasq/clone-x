@@ -3,14 +3,37 @@ from PIL import Image
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
+
+def validate_image_file(value):
+    """Valida se o arquivo é uma imagem válida e segura."""
+    if not value:
+        return
+
+    # Verifica extensão
+    valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+    ext = os.path.splitext(value.name)[1].lower()
+    if ext not in valid_extensions:
+        raise ValidationError(f'Formato de imagem não suportado. Use: {", ".join(valid_extensions)}')
+
+    # Verifica tipo MIME
+    valid_mime_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if hasattr(value.file, 'content_type'):
+        if value.file.content_type not in valid_mime_types:
+            raise ValidationError('Tipo de arquivo não permitido.')
+
+    # Verifica tamanho (máximo 10MB)
+    max_size = 10 * 1024 * 1024  # 10MB
+    if value.size > max_size:
+        raise ValidationError('Imagem muito grande. Máximo 10MB.')
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     content = models.TextField(max_length=280, verbose_name='Conteúdo')
-    image = models.ImageField(upload_to='post_images/', blank=True, null=True, verbose_name='Imagem')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
+    image = models.ImageField(upload_to='post_images/', blank=True, null=True, verbose_name='Imagem', validators=[validate_image_file])
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em', db_index=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 
     def delete(self, *args, **kwargs):

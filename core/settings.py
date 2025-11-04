@@ -216,6 +216,16 @@ LOGGING = {
 }
 
 # ================================================
+# ⚙️ CACHE
+# ================================================
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+# ================================================
 # ⚙️ PADRÃO
 # ================================================
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
